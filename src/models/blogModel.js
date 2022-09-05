@@ -1,4 +1,7 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose")
+
+
+
 const ObjectId = mongoose.Schema.Types.ObjectId
 
 const blogSchema = new mongoose.Schema({
@@ -22,23 +25,33 @@ const blogSchema = new mongoose.Schema({
     },
     subcategory:
         [{type:String}],
-        publishedAt:Date,
 
-        isPublished:{type:Boolean,
+        published:{type:Boolean,
             default:false
     
         },
-        Deletedat:Date,
-        isDeleted:{
+        publishedAt: Date,
+
+
+        Deleted:{
             type:Boolean,
             default:false
        
         },
-       
-    
+        deletedAt: 
+            Date,
+          
+        
+
 
     },{timestamps: true},
 )
 
-module.exports= mongoose.model("blog",blogSchema)
+    module.exports= mongoose.model("blog",blogSchema)
+
+
+
+
+    
+
 
