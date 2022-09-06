@@ -1,8 +1,6 @@
 const mongoose = require("mongoose")
 const time = require("log-timestamp")
 
-
-
 const ObjectId = mongoose.Schema.Types.ObjectId
 
 const blogSchema = new mongoose.Schema({
