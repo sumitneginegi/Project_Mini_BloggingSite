@@ -42,14 +42,23 @@ catch(err){
 
 const getblog =async function (req,res){
     try{
-        let authorId=req.query.authorId
-        if(!authorId) res.status(400).send({msg:"authorId should be present"})
+   
+    const filterQuery = { }
+        const queryParams = req.query
 
-        let data=await blog.find()
-    console.log(data)
-    if (data) res.status(200).send({msg:data,condition :true})
-    if(!data) res.status(404).send({msg:"data not found",status:false})
+        if(isValidRequestBody(queryParams)) {
+            const {authorId, category, tags, subcategory} = queryParams
+
+            if(isValid(authorId) && isValidObjectId(authorId)) {
+                filterQuery['authorId'] = authorId
+            }
+
+            if(isValid(category)) {
+                filterQuery['category'] = category.trim()
+            }
+
     }
+}
     catch(err){
         console.log(err.message)
         res.status(500).send({msg:err.message})
