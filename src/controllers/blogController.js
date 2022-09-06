@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-const blog=require("../models/blogModel")
-const authorModel=require("../models/authorModel")
-
-=======
 const blog = require("../models/blogModel");
 const authorModel = require("../models/authorModel");
->>>>>>> 662ce072f6c9197727373dc45588759a433aa334
 
 const createBlog = async function (req, res) {
   try {
@@ -70,41 +64,8 @@ catch(err){
     res.status(500).send({msg:err.message})
 }
 
-<<<<<<< HEAD
-const getblog =async function (req,res){
-    try{
-   
-    const filterQuery = { }
-        const queryParams = req.query
-
-        if(isValidRequestBody(queryParams)) {
-            const {authorId, category, tags, subcategory} = queryParams
-
-            if(isValid(authorId) && isValidObjectId(authorId)) {
-                filterQuery['authorId'] = authorId
-            }
-
-            if(isValid(category)) {
-                filterQuery['category'] = category.trim()
-            }
-
-    }
-}
-    catch(err){
-        console.log(err.message)
-        res.status(500).send({msg:err.message})
-    
-    }
-}
-
-
-
-module.exports.createBlog=createBlog
-module.exports.getblog=getblog
-=======
 }
 
 
 module.exports.createBlog = createBlog;
 module.exports.updatedBlog = updatedBlog;
->>>>>>> 662ce072f6c9197727373dc45588759a433aa334
