@@ -1,4 +1,9 @@
 
+
+const blog = require("../models/blogsModel");
+const authorModel = require("../models/authorModel");
+
+
 const blog = require("../models/blogsModel")
 const authorModel = require("../models/authorModel")
 
@@ -88,6 +93,36 @@ catch(err){
     console.log(err.message)
     res.status(500).send({msg:err.message})
 }
+const getblog =async function (req,res){
+    try{
+   
+    const filterQuery = { }
+        const queryParams = req.query
+
+        if(isValidRequestBody(queryParams)) {
+            const {authorId, category, tags, subcategory} = queryParams
+
+            if(isValid(authorId) && isValidObjectId(authorId)) {
+                filterQuery['authorId'] = authorId
+            }
+
+            if(isValid(category)) {
+                filterQuery['category'] = category.trim()
+            }
+
+    }
+}
+    catch(err){
+        console.log(err.message)
+        res.status(500).send({msg:err.message})
+    
+    }
+}
+
+
+
+
+
 }
 const deleteBlog = async function(req, res) {    
     let blogId = req.params.blogId
@@ -109,6 +144,10 @@ const deleteBlog = async function(req, res) {
     
 
 
+
 module.exports.createBlog= createBlog
 module.exports.updatedBlog= updatedBlog
 module.exports.deleteBlog= deleteBlog
+module.exports.getblog= getblog
+
+
