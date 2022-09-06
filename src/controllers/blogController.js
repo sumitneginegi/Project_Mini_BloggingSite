@@ -1,6 +1,6 @@
-const blog = require("../models/blogModel")
-const authorModel = require("../models/authorModel")
-//const time =  require("log-timestamp")
+const blog=require("../models/blogModel")
+const authorModel=require("../models/authorModel")
+
 
 
 const createBlog= async function (req, res) {
@@ -40,4 +40,24 @@ catch(err){
 }
 }
 
-module.exports.createBlog= createBlog
+const getblog =async function (req,res){
+    try{
+        let authorId=req.query.authorId
+        if(!authorId) res.status(400).send({msg:"authorId should be present"})
+
+        let data=await blog.find()
+    console.log(data)
+    if (data) res.status(200).send({msg:data,condition :true})
+    if(!data) res.status(404).send({msg:"data not found",status:false})
+    }
+    catch(err){
+        console.log(err.message)
+        res.status(500).send({msg:err.message})
+    
+    }
+}
+
+
+
+module.exports.createBlog=createBlog
+module.exports.getblog=getblog
