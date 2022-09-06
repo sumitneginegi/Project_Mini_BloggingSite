@@ -1,5 +1,8 @@
-const blog = require("../models/blogModel");
-const authorModel = require("../models/authorModel");
+const blog = require("../models/blogModel")
+//const authorModel = require("../models/authorModel")
+const blogModel=require("../models/blogModel")
+
+//====================createBlog=================
 
 const createBlog = async function (req, res) {
   try {
@@ -65,7 +68,28 @@ catch(err){
 }
 
 }
+//===================deleteBlog=============
 
+const deleteBlog = async function(req, res) {    
+  let blogId = req.params.blogId
+  let blog = await blogModel.findById({_id:blogId})
+  if(!blog) { 
+
+      return res.status(404).send({status: false, message: "this type blog is not exists"})
+  }
+  
+  
+  let updatedBlog = await blogModel.findOneAndUpdate({_id:blogId}, {Deleted: true}, {new: true})
+
+//     if(blog.Deleted== true){
+//         console.log({deletedAt:Date()})      
+ res.status(200).send({status:true,data:{updatedBlog},deletedAt:Date()})    
+// res.status(200)send({msg:"Blog is not Deleted"})
+ // res.status(200).send({status: true, data: updatedBlog})
+
+
+}
 
 module.exports.createBlog = createBlog;
 module.exports.updatedBlog = updatedBlog;
+module.exports.deleteBlog=deleteBlog

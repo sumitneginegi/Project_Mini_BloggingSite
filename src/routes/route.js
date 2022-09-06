@@ -16,7 +16,7 @@ router.post("/createAuthor", authorController.createAuthor);
 router.post("/createblog", blogController.createBlog);
 
 router.put("/blogs/:blogId",blogController.updatedBlog)
-
+router.delete("/blogs/:blogId",blogController.deleteBlog)
 
 
 
