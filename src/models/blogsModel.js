@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const time = require("log-timestamp")
 
 
 
@@ -30,7 +31,7 @@ const blogSchema = new mongoose.Schema({
             default:false
     
         },
-        publishedAt: Date,
+        publishedAt:Date,
 
 
         Deleted:{
@@ -38,8 +39,9 @@ const blogSchema = new mongoose.Schema({
             default:false
        
         },
-        deletedAt: 
-            Date,
+        
+        
+            
           
         
 
