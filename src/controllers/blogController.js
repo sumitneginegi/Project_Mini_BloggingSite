@@ -1,22 +1,12 @@
 
-const authorModel = require("../models/authorModel")
 const blog = require("../models/blogsModel")
-const time = require("log-timestamp")
-const blogsModel = require("../models/blogsModel")
-const { findOneAndUpdate } = require("../models/authorModel")
-
-
-const blog = require("../models/blogModel")
 const authorModel = require("../models/authorModel")
-//const time =  require("log-timestamp")
+
 
 
 const createBlog= async function (req, res) {
     try{
     let Blog = req.body
-
-   let publisher = req.body.published
-   let Deleted = req.body.Deleted
     let authorId= await authorModel.findById({_id:Blog.authorId})
     if(!authorId){
         res.status(400).send({msg:"AuthorId is Invalid"})
@@ -66,6 +56,16 @@ catch(err){
     res.status(500).send({msg:err.message})
 }
 }
+const deleteBlog = async function(req, res) {    
+    let blogId = req.params.blogId
+    let blog = await blogsModel.findById(blogId)
+    if(!blog) {
+        return res.status(404).send({status: false, message: "this type blog is not exists"})
+    }
+    let updatedBlog = await blogModel.findOneAndUpdate({_id: blogId}, {isDeleted: true}, {new: true})
+    res.status(200).send({status: true, data: updatedBlog})
+  }
+
 /*const Blogs= async function (req, res) {
     try{
     let Blog = req.body
@@ -77,3 +77,4 @@ catch(err){
 
 
 module.exports.createBlog= createBlog
+module.exports.deleteBlog= deleteBlog

@@ -13,14 +13,9 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-<<<<<<< HEAD
-=======
     "install": "^0.13.0",
->>>>>>> 9cf300d61878d21263e9b3200e36ac87ab41f4dc
-    "log-timestamp": "^0.3.0",
     "moment": "^2.29.1",
     "mongoose": "^6.2.3",
-    
     "nodemon": "^2.0.15",
     "timestamp": "^0.0.1"
   }
