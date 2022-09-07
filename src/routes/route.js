@@ -17,6 +17,6 @@ router.post("/blogs", blogController.createBlog);
 router.put("/blogs/:blogId",blogController.updatedBlog)
 router.delete("/blogs/:blogId",blogController.deleteBlog)
 router.get("/blogs",blogController.getblog)
-//router.post("/login",blogController.authorLogin)
+router.post("/login",blogController.authorLogin)
 
 module.exports = router;
