@@ -265,6 +265,10 @@ const getblog = async function (req, res) {
 
     }
 
+}
+
+//==================================================
+
 
     const authorLogin = async function (req, res) {
         try {
@@ -299,7 +303,7 @@ const getblog = async function (req, res) {
 
     }
 
-}
+
 
 
 
