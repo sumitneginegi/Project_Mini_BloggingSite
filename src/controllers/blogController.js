@@ -201,24 +201,9 @@ module.exports.updatedBlog = updatedBlog
 
 
 
-//===================deleteBlog=============
 
-const deleteBlog = async function(req, res) {    
-    let blogId = req.params.blogId
-    let blog = await blogModel.findById({_id:blogId})
-    if(!blog) { 
-  
-        return res.status(404).send({status: false, message: "this type blog is not exists"})
-    }
-    
-    
-    let updatedBlog = await blogModel.findOneAndDelete({_id:blogId}, {Deleted: true}, {new: true})
-  
-  
-   res.status(200).send({status:true,data:{updatedBlog},deletedAt:Date()})    
-  
-  
-  }
+
+
 
 
 
