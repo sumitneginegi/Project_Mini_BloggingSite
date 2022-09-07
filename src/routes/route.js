@@ -14,12 +14,9 @@ router.get("/test-me", function (req, res) {
 
 router.post("/authors", authorController.createAuthor);
 router.post("/blogs", blogController.createBlog);
-router.get("/blogs", blogController.getblog);
-
 router.put("/blogs/:blogId",blogController.updatedBlog)
-
-router.delete("/blog",blogController.deleteBlog2)
-router.delete("/blog/:blogId",blogController.deleteBlog)
-
+router.delete("/blogs/:blogId",blogController.deleteBlog)
+router.get("/blogs",blogController.getblog)
+router.post("/login",blogController.authorLogin)
 
 module.exports = router;

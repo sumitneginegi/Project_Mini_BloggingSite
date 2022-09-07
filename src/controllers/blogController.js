@@ -1,7 +1,8 @@
 
-const blog= require("../models/blogModel")
-const authorModel = require("../models/authorModel")
+const blog = require("../models/blogModel")
+const authorModel = require("../models/authorModel");
 const { default: mongoose } = require('mongoose')
+const jwt=  require("jsonwebtoken")
 
 
 const createBlog= async function (req, res) {
@@ -109,10 +110,6 @@ const deleteBlog = async function(req, res) {
       }
   
   
-  
-
-
-
 //============get api ============//
 
 
@@ -246,6 +243,32 @@ const isValidObjectId = function (objectId) {
 
     }
 }
+//-------------token Creation & Login------------------------ 
+
+const authorLogin = async function (req, res) {
+    let userName = req.body.email;
+    let password = req.body.password;
+  
+    let author = await authorModel.findOne({ email: userName, password: password });
+    if (!author)
+      return res.status(404).send({
+        status: false,
+        msg: "Username or the Rassword is invalid",
+      });
+  
+    
+    let token = jwt.sign(
+      {//--------Payload--------------------
+        Member1:"Neha Verma",
+        Member2:"Sumit Negi",
+        Member3:"Saurav Kumar",
+        Member4:"Rahul Kumar",
+      },//---------------------------Secret Key -----------------------------
+      "Blogging-Mini-Site(Project1)"
+    );
+    res.setHeader("x-api-key", token);
+    res.send({ status: true, data: token });
+  };
 
 
 
@@ -254,3 +277,4 @@ module.exports.updatedBlog= updatedBlog
 module.exports.deleteBlog= deleteBlog
 module.exports.deleteBlog2= deleteBlog2
 module.exports.getblog= getblog
+module.exports.authorLogin= authorLogin
