@@ -64,11 +64,6 @@ const updatedBlog = async function (req, res) {
 //===================================================================
 // get api
 
-
-
-
-
-
 const getblog = async function (req, res) {
     try {
 
@@ -210,8 +205,27 @@ const isValidObjectId = function (objectId) {
 }
 
 
+//===================deleteBlog   path params=============
+
+const deleteBlog = async function(req, res) {    
+  let blogId = req.params.blogId
+  let blogs = await blog.findOneAndUpdate({_id:blogId},{Deleted:true},{new:true})
+  if(!blogs) { 
+
+      return res.status(404).send({status: false, message: "Blog is not found"})
+  }
+       
+ res.status(200).send({status:true,data:blogs,deletedAt:Date()})    
+
+
+
+}
+
+
+
 
 
 module.exports.createBlog = createBlog
 module.exports.getblog = getblog
 module.exports.updatedBlog = updatedBlog
+module.exports.deleteBlog = deleteBlog
