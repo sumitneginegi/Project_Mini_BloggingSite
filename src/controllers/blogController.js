@@ -1,17 +1,8 @@
 
-
-
-
-
-const blogsModel= require("../models/blogsModel")
+const blog= require("../models/blogsModel")
 const authorModel = require("../models/authorModel")
 const { default: mongoose } = require('mongoose')
 
-
-/*const createBlog = async function (req, res) {
-  try {
-    let Blog = req.body;
-    let published = req.body.published;*/
 
 const createBlog= async function (req, res) {
     try{
@@ -20,37 +11,7 @@ const createBlog= async function (req, res) {
     if(!authorId){
         res.status(400).send({msg:"AuthorId is Invalid"})
     }
-    /*if(publisher==="true"){
-      console.log({publishedAt:Date()}) 
-      
-    }else{
-        res.send({msg:"not published"})
-    }
-    if(Deleted==="true"){
-        console.log({DeletedAt:Date()})
-    }else{
-        res.send({msg:"Not deleted"})
-    }*/
-
-
-    /*let published= req.body.published
-   
-
-    if(!Blog.authorId){
-        res.status(400).send({msg:"AuthorId is not present"})
-    }
-    let authorId = await authorModel.findById({_id:Blog.authorId})
-    if(!authorId){
-        res.status(400).send({msg:"AuthorId is Invalid"})
-    }*/
     
-    // if(published== true){
-    //    console.log({publishedAt:Date()})
-    //  }else res.send({msg:"Blog not published"})
-
-    //  if(Blog.Deleted== true){
-    //     console.log({deletedAt:Date()})
-    //   }else res.send({msg:"Blog is not Deleted"})
 
     let BlogCreated = await blog.create(Blog);
     res.status(201).send({ data: BlogCreated });
@@ -62,9 +23,9 @@ const createBlog= async function (req, res) {
     res.status(500).send({ msg: err.message });
   }
 
+}
 
-
-const createBlog = async function (req, res) {
+/*const createBlog = async function (req, res) {
     try {
         let Blog = req.body;
         let published = req.body.published;
@@ -86,8 +47,8 @@ const createBlog = async function (req, res) {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(500).send({ msg: err.message })
-};
+        res.status(500).send({ msg: err.message })*/
+
 //=====================UpdateBlog========================================
 
 const updatedBlog = async function (req, res) {
@@ -204,25 +165,16 @@ const deleteBlog = async function(req, res) {
 
 const getblog = async function (req, res) {
     try {
-
-
-        
-
 const isValid = function (value) {
     if (typeof value === "undefined" || value === null) return false;
     if (typeof value === "string" && value.trim().length > 0) return true; // validation of string or not            return false;
 };
-
 const isValidRequest = function (object) {
     return Object.keys(object).length > 0         //validation of keys 
 };
-
 const isValidObjectId = function (objectId) {
     return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
 };
-
-
-
         const requestBody = req.body;
         const queryParams = req.query;
 
@@ -316,7 +268,6 @@ const isValidObjectId = function (objectId) {
                     .status(404)
                     .send({ status: false, message: "no blogs found" });
             }
-
             res
                 .status(200)
                 .send({ status: true, message: "filtered blog list", blogsCounts: filetredBlogs.length, blogList: filetredBlogs })
@@ -349,7 +300,3 @@ module.exports.updatedBlog= updatedBlog
 module.exports.deleteBlog= deleteBlog
 module.exports.deleteBlog2= deleteBlog2
 module.exports.getblog= getblog
-
-
-
-
