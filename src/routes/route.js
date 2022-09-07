@@ -12,11 +12,13 @@ router.get("/test-me", function (req, res) {
 });
 
 
-router.post("/createAuthor", authorController.createAuthor);
+router.post("/authors", authorController.createAuthor);
 router.post("/createblog", blogController.createBlog);
 router.get("/getblog", blogController.getblog);
 
 router.put("/blogs/:blogId",blogController.updatedBlog)
+router.delete("/blogs/:blogId",blogController.deleteBlog)
+router.delete("/blog",blogController.deleteBlog2)
 
 
 
