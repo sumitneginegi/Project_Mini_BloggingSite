@@ -2,10 +2,16 @@
 const blog = require("../models/blogModel")
 =======
 
+<<<<<<< HEAD
 const blog= require("../models/blogsModel")
 >>>>>>> 5e13d465c1a44b26a5c8de157b9abde946366159
 const authorModel = require("../models/authorModel")
 const { default: mongoose } = require('mongoose')
+=======
+const blog = require("../models/blogModel")
+const authorModel = require("../models/authorModel");
+const jwt=  require("jsonwebtoken")
+>>>>>>> fd78e2bafdeecac065fb07e09cdbb7772b294cdd
 
 <<<<<<< HEAD
 const mongoose = require('mongoose')
@@ -147,10 +153,6 @@ const deleteBlog = async function(req, res) {
       }
   
   
-  
-
-
-
 //============get api ============//
 
 
@@ -304,6 +306,32 @@ const isValidObjectId = function (objectId) {
 
     }
 }
+//-------------token Creation & Login------------------------ 
+
+const authorLogin = async function (req, res) {
+    let userName = req.body.email;
+    let password = req.body.password;
+  
+    let author = await authorModel.findOne({ email: userName, password: password });
+    if (!author)
+      return res.status(404).send({
+        status: false,
+        msg: "Username or the Rassword is invalid",
+      });
+  
+    
+    let token = jwt.sign(
+      {//--------Payload--------------------
+        Member1:"Neha Verma",
+        Member2:"Sumit Negi",
+        Member3:"Saurav Kumar",
+        Member4:"Rahul Kumar",
+      },//---------------------------Secret Key -----------------------------
+      "Blogging-Mini-Site(Project1)"
+    );
+    res.setHeader("x-api-key", token);
+    res.send({ status: true, data: token });
+  };
 
 
 <<<<<<< HEAD
@@ -338,4 +366,8 @@ module.exports.updatedBlog= updatedBlog
 module.exports.deleteBlog= deleteBlog
 module.exports.deleteBlog2= deleteBlog2
 module.exports.getblog= getblog
+<<<<<<< HEAD
 >>>>>>> 5e13d465c1a44b26a5c8de157b9abde946366159
+=======
+module.exports.authorLogin= authorLogin
+>>>>>>> fd78e2bafdeecac065fb07e09cdbb7772b294cdd
