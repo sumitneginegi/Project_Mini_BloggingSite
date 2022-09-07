@@ -205,13 +205,13 @@ const isValidObjectId = function (objectId) {
 
 const deleteBlog = async function(req, res) {    
   let blogId = req.params.blogId
-  let blog = await blogModel.findById({_id:blogId},{Deleted:true},{new:true})
-  if(!blog) { 
+  let blogs = await blog.findOneAndUpdate({_id:blogId},{Deleted:true},{new:true})
+  if(!blogs) { 
 
       return res.status(404).send({status: false, message: "Blog is not found"})
   }
        
- res.status(200).send({status:true})    
+ res.status(200).send({status:true,data:blogs,deletedAt:Date()})    
 
 
 
