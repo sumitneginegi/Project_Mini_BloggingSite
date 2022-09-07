@@ -1,34 +1,37 @@
-
 const blog = require("../models/blogModel")
 const authorModel = require("../models/authorModel")
+
 const mongoose = require('mongoose')
 
 
 const createBlog = async function (req, res) {
     try {
         let Blog = req.body;
-        //let published = req.body.published;
+        let published = req.body.published;
 
         if (!Blog.authorId) {
             res.status(400).send({ msg: "AuthorId is not present" });
         }
         let authorId = await authorModel.findById({ _id: Blog.authorId });
         if (!authorId) {
-            res.status(404).send({ msg: "Author not found" });
+            res.status(400).send({ msg: "AuthorId is Invalid" });
         }
+
+
 
         let BlogCreated = await blog.create(Blog);
         res.status(201).send({ data: BlogCreated });
         if (!Blog) {
-            res.status(400).send({ msg: "This is Invalid Request", status: false });
+            res.status(404).send({ msg: "This is Invalid Request", status: false });
         }
-    } 
-    catch (err) {
+    } catch (err) {
         console.log(err.message);
         res.status(500).send({ msg: err.message });
     }
 };
-//=====================UpdateBlog========================================
+
+//===================================================================
+// update blog
 
 const updatedBlog = async function (req, res) {
 
@@ -56,10 +59,21 @@ const updatedBlog = async function (req, res) {
 }
 
 
-//=========================== get api=====================
+
+
+//===================================================================
+// get api
+
+
+
+
+
 
 const getblog = async function (req, res) {
-    try {      
+    try {
+
+
+        
 
 const isValid = function (value) {
     if (typeof value === "undefined" || value === null) return false;
@@ -73,6 +87,8 @@ const isValidRequest = function (object) {
 const isValidObjectId = function (objectId) {
     return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
 };
+
+
 
         const requestBody = req.body;
         const queryParams = req.query;
@@ -194,31 +210,8 @@ const isValidObjectId = function (objectId) {
 }
 
 
+
+
 module.exports.createBlog = createBlog
 module.exports.getblog = getblog
 module.exports.updatedBlog = updatedBlog
-
-
-
-
-//===================deleteBlog=============
-
-const deleteBlog = async function(req, res) {    
-    let blogId = req.params.blogId
-    let blog = await blogModel.findById({_id:blogId})
-    if(!blog) { 
-  
-        return res.status(404).send({status: false, message: "this type blog is not exists"})
-    }
-    
-    
-    let updatedBlog = await blogModel.findOneAndDelete({_id:blogId}, {Deleted: true}, {new: true})
-  
-  
-   res.status(200).send({status:true,data:{updatedBlog},deletedAt:Date()})    
-  
-  
-  }
-
-
-
