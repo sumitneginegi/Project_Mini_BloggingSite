@@ -1,5 +1,5 @@
 const blog = require("../models/blogModel")
-//const authorModel = require("../models/authorModel")
+const authorModel = require("../models/authorModel")
 const blogModel=require("../models/blogModel")
 
 //====================createBlog=================
@@ -68,28 +68,62 @@ catch(err){
 }
 
 }
+
+//===========================getBlog===================
+
+const getblog = async function (req, res) {
+  try {
+
+      const filterQuery = {}
+      const queryParams = req.query
+
+      if (isValidRequestBody(queryParams)) {
+          const { authorId, category, tags, subcategory } = queryParams
+
+          if (isValid(authorId) && isValidObjectId(authorId)) {
+              filterQuery['authorId'] = authorId
+          }
+
+          if (isValid(category)) {
+              filterQuery['category'] = category.trim()
+          }
+         
+          if (isValid(tags)) {
+              filterQuery['tags'] = tags.trim()
+          }
+          
+          if (isValid(subcategory)) {
+              filterQuery['subcategory'] = subcategory.trim()
+          }
+        
+      }
+      res.send
+
+  }
+  catch (err) {
+      console.log(err.message)
+      res.status(500).send({ msg: err.message })
+
+  }
+}
+
 //===================deleteBlog=============
 
 const deleteBlog = async function(req, res) {    
   let blogId = req.params.blogId
-  let blog = await blogModel.findById({_id:blogId})
+  let blog = await blogModel.findById({_id:blogId},{Deleted:true},{new:true})
   if(!blog) { 
 
-      return res.status(404).send({status: false, message: "this type blog is not exists"})
+      return res.status(404).send({status: false, message: "Blog is not found"})
   }
-  
-  
-  let updatedBlog = await blogModel.findOneAndUpdate({_id:blogId}, {Deleted: true}, {new: true})
+       
+ res.status(200).send({status:true})    
 
-//     if(blog.Deleted== true){
-//         console.log({deletedAt:Date()})      
- res.status(200).send({status:true,data:{updatedBlog},deletedAt:Date()})    
-// res.status(200)send({msg:"Blog is not Deleted"})
- // res.status(200).send({status: true, data: updatedBlog})
 
 
 }
 
 module.exports.createBlog = createBlog;
 module.exports.updatedBlog = updatedBlog;
-module.exports.deleteBlog=deleteBlog
+module.exports.deleteBlog=deleteBlog;
+module.exports.getblog=getblog;
