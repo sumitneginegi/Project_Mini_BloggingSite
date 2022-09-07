@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 const blog = require("../models/blogModel")
 const authorModel = require("../models/authorModel")
 
 const mongoose = require('mongoose')
 
+=======
+const blog = require("../models/blogModel");
+const authorModel = require("../models/authorModel");
+>>>>>>> bed85c03a042b4c07ddaaa2d3b4d109b12f7b86c
 
 const createBlog = async function (req, res) {
     try {
@@ -53,6 +58,7 @@ const updatedBlog = async function (req, res) {
             console.log({ publishedAt: Date() });
         } else res.status(400).send({ msg: "Blog not published" });
 
+<<<<<<< HEAD
 
     }
 
@@ -218,3 +224,10 @@ const isValidObjectId = function (objectId) {
 module.exports.createBlog = createBlog
 module.exports.getblog = getblog
 module.exports.updatedBlog = updatedBlog
+=======
+}
+
+
+module.exports.createBlog = createBlog;
+module.exports.updatedBlog = updatedBlog;
+>>>>>>> bed85c03a042b4c07ddaaa2d3b4d109b12f7b86c
