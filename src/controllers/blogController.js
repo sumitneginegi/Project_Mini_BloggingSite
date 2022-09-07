@@ -1,19 +1,7 @@
-<<<<<<< HEAD
 const blog = require("../models/blogModel")
-=======
-
-<<<<<<< HEAD
-const blog= require("../models/blogsModel")
->>>>>>> 5e13d465c1a44b26a5c8de157b9abde946366159
 const authorModel = require("../models/authorModel")
-const { default: mongoose } = require('mongoose')
-=======
-const blog = require("../models/blogModel")
-const authorModel = require("../models/authorModel");
-const jwt=  require("jsonwebtoken")
->>>>>>> fd78e2bafdeecac065fb07e09cdbb7772b294cdd
 
-<<<<<<< HEAD
+
 const mongoose = require('mongoose')
 
 
@@ -43,52 +31,28 @@ const createBlog = async function (req, res) {
     }
 };
 
-//===================================================================
-// update blog
-=======
 
-const createBlog= async function (req, res) {
-    try{
-    let Blog = req.body
-    let authorId= await authorModel.findById({_id:Blog.authorId})
-    if(!authorId){
-        res.status(400).send({msg:"AuthorId is Invalid"})
-    }
-    
->>>>>>> 5e13d465c1a44b26a5c8de157b9abde946366159
-
-    let BlogCreated = await blog.create(Blog);
-    res.status(201).send({ data: BlogCreated });
-    if (!Blog) {
-      res.status(404).send({ msg: "This is Invalid Request", status: false });
-    }
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).send({ msg: err.message });
-  }
-
-}
 
 
 //=====================UpdateBlog========================================
 const updatedBlog = async function (req, res) {
 
-    try{
+    try {
         let blogId = req.params.blogId
-        let blogs = await blog.findById({_id:blogId})
-        if(!blogs) { 
-      
-            return res.status(404).send({status: false, message: "This blog does not exists"})
-        }
-        
-        let updatedBlog = await blog.findOneAndUpdate(
-            {_id:blogId}, //condition 
-            {$set:{published: true,title: "Silent Sea" }}, //update
-            {new: true})// return updated value
+        let blogs = await blog.findById({ _id: blogId })
+        if (!blogs) {
 
-       res.status(200).send({status:true,data:{updatedBlog},publishedAt:Date()})    
-      
-      }
+            return res.status(404).send({ status: false, message: "This blog does not exists" })
+        }
+
+        let updatedBlog = await blog.findOneAndUpdate(
+            { _id: blogId }, //condition 
+            { $set: { published: true, title: "Silent Sea" } }, //update
+            { new: true })// return updated value
+
+        res.status(200).send({ status: true, data: { updatedBlog }, publishedAt: Date() })
+
+    }
 
     catch (err) {
         console.log(err.message)
@@ -97,66 +61,69 @@ const updatedBlog = async function (req, res) {
 }
 //=========================
 
-const deleteBlog = async function(req, res) {    
+const deleteBlog = async function (req, res) {
     let blogId = req.params.blogId
-    let blogs = await blog.findOneAndUpdate({_id:blogId},{Deleted:true},{new:true})
-    if(!blogs) { 
-  
-        return res.status(404).send({status: false, message: "Blog is not found"})
+    let blogs = await blog.findOneAndUpdate({ _id: blogId }, { Deleted: true }, { new: true })
+    if (!blogs) {
+
+        return res.status(404).send({ status: false, message: "Blog is not found" })
     }
-         
-   res.status(200).send({status:true,data:blogs,deletedAt:Date()})    
-  
-  
-  
-  }
-  
-  
-  
-  
+
+    res.status(200).send({ status: true, data: blogs, deletedAt: Date() })
+
+
+
+}
+
+
+
+
 
 //====================================delete query param================//
 
 
 
-  const deleteBlog2 = async function(req, res) {    
-        try {
-            let data = req.query
-            let { authorId, category, tags, subcategory, published } = data
-            let isValid = mongoose.Types.ObjectId.isValid(authorId)
-            if (Object.keys(data).length === 0) {
-                return res.status(400).send({ status: false, message: "Please give some parameters to check" })
-            }
-            if (authorId) {
-                if (!isValid) {
-                    return res.status(400).send({ status: false, message: "Not a valid Author ID" })
-                }
-            }
-           let filter = { Deleted: false }
-            if (authorId != null) { filter.authorId = authorId }
-            if (category != null) { filter.category = category }
-            if (tags != null) { filter.tags = { $in: [tags] } }
-            if (subcategory != null) { filter.subcategory = { $in: [subcategory] } }
-            if (published != null) { filter.published = published }
-            let filtered = await blog.find(filter)
-            if (filtered.length == 0) {
-                return res.status(400).send({ status: false, message: "No such data found" })
-            } else {
-                let deletedData = await blog.updateMany( filter,{Deleted: true  ,deletedAt:Date() }, {new: true })
-            let deletedAt=Date() 
-             return res.status(200).send({ status: true, msg: "data deleted successfully", data:deletedData,deletedAt })
+const deleteBlog2 = async function (req, res) {
+    try {
+        let data = req.query
+        let { authorId, category, tags, subcategory, published } = data
+        let isValid = mongoose.Types.ObjectId.isValid(authorId)
+        if (Object.keys(data).length === 0) {
+            return res.status(400).send({ status: false, message: "Please give some parameters to check" })
+        }
+        if (authorId) {
+            if (!isValid) {
+                return res.status(400).send({ status: false, message: "Not a valid Author ID" })
             }
         }
-        catch (error) {
-            res.status(500).send({ status: false, message: error.message })
+        let filter = { Deleted: false }
+        if (authorId != null) { filter.authorId = authorId }
+        if (category != null) { filter.category = category }
+        if (tags != null) { filter.tags = { $in: [tags] } }
+        if (subcategory != null) { filter.subcategory = { $in: [subcategory] } }
+        if (published != null) { filter.published = published }
+        let filtered = await blog.find(filter)
+        if (filtered.length == 0) {
+            return res.status(400).send({ status: false, message: "No such data found" })
+        } else {
+            let deletedData = await blog.updateMany(filter, { Deleted: true, deletedAt: Date() }, { new: true })
+            let deletedAt = Date()
+            return res.status(200).send({ status: true, msg: "data deleted successfully", data: deletedData, deletedAt })
         }
-      }
-  
-  
-//============get api ============//
+    }
+    catch (error) {
+        res.status(500).send({ status: false, message: error.message })
+    }
+}
 
 
-<<<<<<< HEAD
+
+
+
+
+
+
+
 
 
 //===================================================================
@@ -166,29 +133,21 @@ const getblog = async function (req, res) {
     try {
 
 
-        
 
-=======
 
-const getblog = async function (req, res) {
-    try {
->>>>>>> 5e13d465c1a44b26a5c8de157b9abde946366159
-const isValid = function (value) {
-    if (typeof value === "undefined" || value === null) return false;
-    if (typeof value === "string" && value.trim().length > 0) return true; // validation of string or not            return false;
-};
-const isValidRequest = function (object) {
-    return Object.keys(object).length > 0         //validation of keys 
-};
-const isValidObjectId = function (objectId) {
-    return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
-};
-<<<<<<< HEAD
+        const isValid = function (value) {
+            if (typeof value === "undefined" || value === null) return false;
+            if (typeof value === "string" && value.trim().length > 0) return true; // validation of string or not            return false;
+        };
+        const isValidRequest = function (object) {
+            return Object.keys(object).length > 0         //validation of keys 
+        };
+        const isValidObjectId = function (objectId) {
+            return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
+        };
 
 
 
-=======
->>>>>>> 5e13d465c1a44b26a5c8de157b9abde946366159
         const requestBody = req.body;
         const queryParams = req.query;
 
@@ -305,69 +264,49 @@ const isValidObjectId = function (objectId) {
         res.status(500).send({ error: error.message })
 
     }
-}
-//-------------token Creation & Login------------------------ 
-
-const authorLogin = async function (req, res) {
-    let userName = req.body.email;
-    let password = req.body.password;
-  
-    let author = await authorModel.findOne({ email: userName, password: password });
-    if (!author)
-      return res.status(404).send({
-        status: false,
-        msg: "Username or the Rassword is invalid",
-      });
-  
-    
-    let token = jwt.sign(
-      {//--------Payload--------------------
-        Member1:"Neha Verma",
-        Member2:"Sumit Negi",
-        Member3:"Saurav Kumar",
-        Member4:"Rahul Kumar",
-      },//---------------------------Secret Key -----------------------------
-      "Blogging-Mini-Site(Project1)"
-    );
-    res.setHeader("x-api-key", token);
-    res.send({ status: true, data: token });
-  };
 
 
-<<<<<<< HEAD
-//===================deleteBlog   path params=============
+    const authorLogin = async function (req, res) {
+        try {
+            let userName = req.body.email;
+            let password = req.body.password;
 
-const deleteBlog = async function(req, res) {    
-  let blogId = req.params.blogId
-  let blogs = await blog.findOneAndUpdate({_id:blogId},{Deleted:true},{new:true})
-  if(!blogs) { 
-
-      return res.status(404).send({status: false, message: "Blog is not found"})
-  }
-       
- res.status(200).send({status:true,data:blogs,deletedAt:Date()})    
+            let author = await authorModel.findOne({ email: userName, password: password });
+            if (!author)
+                return res.status(404).send({
+                    status: false,
+                    msg: "Username or the Rassword is invalid",
+                });
 
 
+            let token = jwt.sign(
+                {//--------Payload--------------------
+                    Member1: "Neha Verma",
+                    Member2: "Sumit Negi",
+                    Member3: "Saurav Kumar",
+                    Member4: "Rahul Kumar",
+                },//---------------------------Secret Key -----------------------------
+                "Blogging-Mini-Site(Project1)"
+            );
+            res.setHeader("x-api-key", token);
+            res.send({ status: true, data: token });
+        }
+        catch (error) {
+
+            res.status(500).send({ error: error.message })
+
+        }
+
+    }
 
 }
-
-
 
 
 
 module.exports.createBlog = createBlog
-module.exports.getblog = getblog
 module.exports.updatedBlog = updatedBlog
 module.exports.deleteBlog = deleteBlog
-=======
+module.exports.deleteBlog2 = deleteBlog2
+module.exports.getblog = getblog
+module.exports.authorLogin = authorLogin
 
-module.exports.createBlog= createBlog
-module.exports.updatedBlog= updatedBlog
-module.exports.deleteBlog= deleteBlog
-module.exports.deleteBlog2= deleteBlog2
-module.exports.getblog= getblog
-<<<<<<< HEAD
->>>>>>> 5e13d465c1a44b26a5c8de157b9abde946366159
-=======
-module.exports.authorLogin= authorLogin
->>>>>>> fd78e2bafdeecac065fb07e09cdbb7772b294cdd
