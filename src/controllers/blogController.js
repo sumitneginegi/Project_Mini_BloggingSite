@@ -1,6 +1,7 @@
 
 const blog = require("../models/blogModel")
-const authorModel = require("../models/authorModel")
+const authorModel = require("../models/authorModel");
+const jwt=  require("jsonwebtoken")
 
 
 //====================createBlog=================
@@ -198,9 +199,6 @@ const isValidObjectId = function (objectId) {
 
 
 
-
-
-
 //===================deleteBlog=============
 
 const deleteBlog = async function(req, res) {    
@@ -214,10 +212,37 @@ const deleteBlog = async function(req, res) {
  res.status(200).send({status:true,data:blogs,deletedAt:Date()})    
 
 
+}
+
+let authorLogin = async function(req, res){
+    let userName = req.body.email
+    let password = req.body.password
+
+    let author = await authorModel.findOne({email:userName,password:password})
+    if(!author){
+        res.status(404).send({status:false,msg:"Username or Password is Invalid"})
+    }
+
+    //=====Token Creation============
+    let token = jwt.sign({
+        //------payload-----------
+        Member1: "Neha Verma",
+        Member2: "Sumit Negi",
+        Member3: "Saurav Kumar",
+        Member4: "Rahul Kumar",
+    },"Project1-MiniBloggingSite()")   //------secretKey--------//
+
+res.setHeader("x-api-key",token)
+res.status(200).send({status:true,data:token})
+
 
 }
+
+
+
 
 module.exports.createBlog = createBlog;
 module.exports.updatedBlog = updatedBlog;
 module.exports.deleteBlog=deleteBlog;
 module.exports.getblog=getblog;
+module.exports.authorLogin = authorLogin;
