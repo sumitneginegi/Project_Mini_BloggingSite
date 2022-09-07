@@ -108,11 +108,9 @@ const deleteBlog = async function(req, res) {
     
     let updatedBlog = await blogModel.findOneAndDelete({_id:blogId}, {Deleted: true}, {new: true})
   
-  //     if(blog.Deleted== true){
-  //         console.log({deletedAt:Date()})      
+  
    res.status(200).send({status:true,data:{updatedBlog},deletedAt:Date()})    
-  // res.status(200)send({msg:"Blog is not Deleted"})
-   // res.status(200).send({status: true, data: updatedBlog})
+  
   
   
   }
