@@ -1,7 +1,10 @@
 
 const blog = require("../models/blogModel")
 const authorModel = require("../models/authorModel")
-const mongoose = require('mongoose')
+
+
+//====================createBlog=================
+
 
 
 const createBlog = async function (req, res) {
@@ -194,16 +197,27 @@ const isValidObjectId = function (objectId) {
 }
 
 
-module.exports.createBlog = createBlog
-module.exports.getblog = getblog
-module.exports.updatedBlog = updatedBlog
 
 
 
 
+//===================deleteBlog=============
+
+const deleteBlog = async function(req, res) {    
+  let blogId = req.params.blogId
+  let blogs = await blog.findOneAndUpdate({_id:blogId},{Deleted:true},{new:true})
+  if(!blogs) { 
+
+      return res.status(404).send({status: false, message: "Blog is not found"})
+  }
+       
+ res.status(200).send({status:true,data:blogs,deletedAt:Date()})    
 
 
 
+}
 
-
-
+module.exports.createBlog = createBlog;
+module.exports.updatedBlog = updatedBlog;
+module.exports.deleteBlog=deleteBlog;
+module.exports.getblog=getblog;
