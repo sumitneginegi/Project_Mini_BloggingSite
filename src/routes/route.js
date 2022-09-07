@@ -13,8 +13,8 @@ router.get("/test-me", function (req, res) {
 
 
 router.post("/authors", authorController.createAuthor);
-router.post("/createblog", blogController.createBlog);
-router.get("/getblog", blogController.getblog);
+router.post("/blogs", blogController.createBlog);
+router.get("/blogs", blogController.getblog);
 
 router.put("/blogs/:blogId",blogController.updatedBlog)
 
