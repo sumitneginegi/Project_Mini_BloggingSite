@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 const blog = require("../models/blogModel")
-const authorModel = require("../models/authorModel")
+=======
 
+const blog= require("../models/blogsModel")
+>>>>>>> 5e13d465c1a44b26a5c8de157b9abde946366159
+const authorModel = require("../models/authorModel")
+const { default: mongoose } = require('mongoose')
+
+<<<<<<< HEAD
 const mongoose = require('mongoose')
 
 
@@ -32,7 +39,32 @@ const createBlog = async function (req, res) {
 
 //===================================================================
 // update blog
+=======
 
+const createBlog= async function (req, res) {
+    try{
+    let Blog = req.body
+    let authorId= await authorModel.findById({_id:Blog.authorId})
+    if(!authorId){
+        res.status(400).send({msg:"AuthorId is Invalid"})
+    }
+    
+>>>>>>> 5e13d465c1a44b26a5c8de157b9abde946366159
+
+    let BlogCreated = await blog.create(Blog);
+    res.status(201).send({ data: BlogCreated });
+    if (!Blog) {
+      res.status(404).send({ msg: "This is Invalid Request", status: false });
+    }
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send({ msg: err.message });
+  }
+
+}
+
+
+//=====================UpdateBlog========================================
 const updatedBlog = async function (req, res) {
 
     try{
@@ -57,8 +89,72 @@ const updatedBlog = async function (req, res) {
         res.status(500).send({ msg: err.message })
     }
 }
+//=========================
+
+const deleteBlog = async function(req, res) {    
+    let blogId = req.params.blogId
+    let blogs = await blog.findOneAndUpdate({_id:blogId},{Deleted:true},{new:true})
+    if(!blogs) { 
+  
+        return res.status(404).send({status: false, message: "Blog is not found"})
+    }
+         
+   res.status(200).send({status:true,data:blogs,deletedAt:Date()})    
+  
+  
+  
+  }
+  
+  
+  
+  
+
+//====================================delete query param================//
 
 
+
+  const deleteBlog2 = async function(req, res) {    
+        try {
+            let data = req.query
+            let { authorId, category, tags, subcategory, published } = data
+            let isValid = mongoose.Types.ObjectId.isValid(authorId)
+            if (Object.keys(data).length === 0) {
+                return res.status(400).send({ status: false, message: "Please give some parameters to check" })
+            }
+            if (authorId) {
+                if (!isValid) {
+                    return res.status(400).send({ status: false, message: "Not a valid Author ID" })
+                }
+            }
+           let filter = { Deleted: false }
+            if (authorId != null) { filter.authorId = authorId }
+            if (category != null) { filter.category = category }
+            if (tags != null) { filter.tags = { $in: [tags] } }
+            if (subcategory != null) { filter.subcategory = { $in: [subcategory] } }
+            if (published != null) { filter.published = published }
+            let filtered = await blog.find(filter)
+            if (filtered.length == 0) {
+                return res.status(400).send({ status: false, message: "No such data found" })
+            } else {
+                let deletedData = await blog.updateMany( filter,{Deleted: true  ,deletedAt:Date() }, {new: true })
+            let deletedAt=Date() 
+             return res.status(200).send({ status: true, msg: "data deleted successfully", data:deletedData,deletedAt })
+            }
+        }
+        catch (error) {
+            res.status(500).send({ status: false, message: error.message })
+        }
+      }
+  
+  
+  
+
+
+
+//============get api ============//
+
+
+<<<<<<< HEAD
 
 
 //===================================================================
@@ -70,21 +166,27 @@ const getblog = async function (req, res) {
 
         
 
+=======
+
+const getblog = async function (req, res) {
+    try {
+>>>>>>> 5e13d465c1a44b26a5c8de157b9abde946366159
 const isValid = function (value) {
     if (typeof value === "undefined" || value === null) return false;
     if (typeof value === "string" && value.trim().length > 0) return true; // validation of string or not            return false;
 };
-
 const isValidRequest = function (object) {
     return Object.keys(object).length > 0         //validation of keys 
 };
-
 const isValidObjectId = function (objectId) {
     return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
 };
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 5e13d465c1a44b26a5c8de157b9abde946366159
         const requestBody = req.body;
         const queryParams = req.query;
 
@@ -178,7 +280,6 @@ const isValidObjectId = function (objectId) {
                     .status(404)
                     .send({ status: false, message: "no blogs found" });
             }
-
             res
                 .status(200)
                 .send({ status: true, message: "filtered blog list", blogsCounts: filetredBlogs.length, blogList: filetredBlogs })
@@ -205,6 +306,7 @@ const isValidObjectId = function (objectId) {
 }
 
 
+<<<<<<< HEAD
 //===================deleteBlog   path params=============
 
 const deleteBlog = async function(req, res) {    
@@ -229,3 +331,11 @@ module.exports.createBlog = createBlog
 module.exports.getblog = getblog
 module.exports.updatedBlog = updatedBlog
 module.exports.deleteBlog = deleteBlog
+=======
+
+module.exports.createBlog= createBlog
+module.exports.updatedBlog= updatedBlog
+module.exports.deleteBlog= deleteBlog
+module.exports.deleteBlog2= deleteBlog2
+module.exports.getblog= getblog
+>>>>>>> 5e13d465c1a44b26a5c8de157b9abde946366159
