@@ -1,5 +1,5 @@
 
-const blog= require("../models/blogsModel")
+const blog= require("../models/blogModel")
 const authorModel = require("../models/authorModel")
 const { default: mongoose } = require('mongoose')
 
