@@ -14,7 +14,7 @@ router.post("/authors", authorController.createAuthor);
 router.post("/createblog", blogController.createBlog);
 router.put("/blogs/:blogId",blogController.updatedBlog)
 router.get("/getblog",blogController.getblog)
-router.delete("/getblog",blogController.getblog)
+
 
 
 
