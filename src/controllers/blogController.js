@@ -1,12 +1,6 @@
 const blog = require("../models/blogModel")
-<<<<<<< HEAD
 const authorModel = require("../models/authorModel")
-constjwt = require('jsonwebtoken');
-=======
-const authorModel = require("../models/authorModel");
-const  mongoose = require('mongoose')
-const jwt=  require("jsonwebtoken")
->>>>>>> e5568838e159fa75b6dbdef4edf4eea6729017af
+//const jwt = require('jsonwebtoken');
 
 
 const mongoose = require('mongoose')
@@ -55,24 +49,6 @@ const updatedBlog = async function (req, res) {
             return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
         };
 
-<<<<<<< HEAD
-    try {
-        let blogId = req.params.blogId
-        let blogs = await blog.findById({ _id: blogId })
-        if (!blogs) {
-
-            return res.status(404).send({ status: false, message: "This blog does not exists" })
-        }
-
-        let updatedBlog = await blog.findOneAndUpdate(
-            { _id: blogId }, //condition 
-            {$set: { published: true, title: "Silent Sea"} }, //update
-            { new: true })// return updated value
-
-        res.status(200).send({ status: true, data: { updatedBlog }, publishedAt: Date() })
-
-    }
-=======
         const blogId = req.params["blogId"]
         const requestBody = req.body;
         const queryParams = req.query;
@@ -188,16 +164,13 @@ const updatedBlog = async function (req, res) {
     } catch (error) {
 
         res.status(500).send({ error: error.message })
->>>>>>> e5568838e159fa75b6dbdef4edf4eea6729017af
 
     }
 }
-<<<<<<< HEAD
-//========================delete api path params=========================
-=======
 
-//=========================
->>>>>>> e5568838e159fa75b6dbdef4edf4eea6729017af
+
+
+//========================delete api path params=========================
 
 const deleteBlog = async function (req, res) {
     let blogId = req.params.blogId
@@ -405,42 +378,6 @@ const getblog = async function (req, res) {
 
 }
 
-//===============================authorLogin===============================
-
-
-const authorLogin = async function (req, res) {
-    try {
-        let userName = req.body.email;
-        let password = req.body.password;
-
-        let author = await authorModel.findOne({ email: userName, password: password });
-        if (!author)
-            return res.status(404).send({
-                status: false,
-                msg: "Username or the Rassword is invalid",
-            });
-
-
-        let token = jwt.sign(
-            {//--------Payload--------------------
-                Member1: "Neha Verma",
-                Member2: "Sumit Negi",
-                Member3: "Saurav Kumar",
-                Member4: "Rahul Kumar",
-            },//---------------------------Secret Key -----------------------------
-            "Blogging-Mini-Site(Project1)"
-        );
-        res.setHeader("x-api-key", token);
-        res.send({ status: true, data: token });
-    }
-    catch (error) {
-
-        res.status(500).send({ error: error.message })
-
-    }
-
-}
-
 
 
 
@@ -450,5 +387,5 @@ module.exports.updatedBlog = updatedBlog
 module.exports.deleteBlog = deleteBlog
 module.exports.deleteBlog2 = deleteBlog2
 module.exports.getblog = getblog
-module.exports.authorLogin = authorLogin
+
 

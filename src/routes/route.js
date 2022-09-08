@@ -16,12 +16,12 @@ router.get("/test-me", function (req, res) {
 
 
 router.post("/authors", authorController.createAuthor);
-router.post("/blogs",middleware.authenticate, blogController.createBlog);
-router.put("/blogs/:blogId",middleware.authenticate,blogController.updatedBlog)
+router.post("/blogs",middleware.authentication,middleware.authorization, blogController.createBlog);
+router.put("/blogs/:blogId",middleware.authentication,middleware.authorization,blogController.updatedBlog)
 
-router.delete("/blogs/:blogId",middleware.authenticate,blogController.deleteBlog)
-router.get("/blogs",middleware.authenticate,blogController.getblog)
-router.delete("/blogs",middleware.authenticate,blogController.deleteBlog2)
+router.delete("/blogs/:blogId",middleware.authentication,middleware.authorization,blogController.deleteBlog)
+router.get("/blogs",middleware.authentication,middleware.authorization,blogController.getblog)
+router.delete("/blogs",middleware.authentication,middleware.authorization,blogController.deleteBlog2)
 router.post("/login",authorController.authorLogin)
 
 

@@ -1,4 +1,6 @@
 const AuthorModel=require("../models/authorModel")
+const jwt = require('jsonwebtoken');
+
 
 const createAuthor= async function (req, res) {
     try{
@@ -21,7 +23,7 @@ const authorLogin = async function (req, res) {
         let userName = req.body.email;
         let password = req.body.password;
 
-        let author = await authorModel.findOne({ email: userName, password: password });
+        let author = await AuthorModel.findOne({ email: userName, password: password });
         if (!author)
             return res.status(404).send({
                 status: false,
