@@ -1,4 +1,4 @@
-const jwt=require('jsonwebtoken')
+constjwt=require('jsonwebtoken');
 const authenticate = function(req, res, next) {
       //check the token in request header
     //validate this token
@@ -13,7 +13,7 @@ const authenticate = function(req, res, next) {
   // Input 1 is the token to be decoded
   // Input 2 is the same secret with which the token was generated
   // Check the value of the decoded token yourself
-  let decodedToken = jwt.verify(token, "Blogging-Mini-Site(Project1)");
+  let decodedToken = verify(token, "Blogging-Mini-Site(Project1)");
   if (!decodedToken)
     return res.status(401).send({ status: false, msg: "token is invalid" });
     req.UserLoggedIn= decodedToken.userId
@@ -24,3 +24,6 @@ catch (err) {
   res.status(500).send({ msg: "error", error: err.message })
 }
 }
+
+const _authenticate = authenticate;
+export { _authenticate as authenticate };

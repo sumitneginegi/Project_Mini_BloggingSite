@@ -1,5 +1,6 @@
 const blog = require("../models/blogModel")
 const authorModel = require("../models/authorModel")
+constjwt=require('jsonwebtoken');
 
 
 const mongoose = require('mongoose')
@@ -47,7 +48,7 @@ const updatedBlog = async function (req, res) {
 
         let updatedBlog = await blog.findOneAndUpdate(
             { _id: blogId }, //condition 
-            { $set: { published: true, title: "Silent Sea" } }, //update
+            { $set: { published: true, title: "Silent Sea"} }, //update
             { new: true })// return updated value
 
         res.status(200).send({ status: true, data: { updatedBlog }, publishedAt: Date() })
@@ -126,8 +127,8 @@ const deleteBlog2 = async function (req, res) {
 
 
 
-//===================================================================
-// get api
+//================================== get api=================================
+
 
 const getblog = async function (req, res) {
     try {
@@ -267,7 +268,7 @@ const getblog = async function (req, res) {
 
 }
 
-//==================================================
+//===============================authorLogin===============================
 
 
     const authorLogin = async function (req, res) {

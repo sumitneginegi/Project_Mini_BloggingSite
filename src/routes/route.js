@@ -4,6 +4,9 @@ const router = express.Router();
 
 const authorController = require("../controllers/authorController");
 const blogController = require("../controllers/blogController");
+constjwt=require('jsonwebtoken');
+
+
 
 
 router.get("/test-me", function (req, res) {
@@ -18,7 +21,7 @@ router.put("/blogs/:blogId",blogController.updatedBlog)
 router.delete("/blogs/:blogId",blogController.deleteBlog)
 
 router.get("/blogs",blogController.getblog)
-router.get("/blogs",blogController.deleteBlog2)
+router.delete("/blogs",blogController.deleteBlog2)
 router.post("/login",blogController.authorLogin)
 
 
