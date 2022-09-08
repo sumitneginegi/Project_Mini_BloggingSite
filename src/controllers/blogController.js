@@ -2,30 +2,53 @@
 const blog = require("../models/blogModel")
 const authorModel = require("../models/authorModel");
 const  mongoose = require('mongoose')
-const jwt=  require("jsonwebtoken")
-const mongoose = require("mongoose")
 
 
-const createBlog= async function (req, res) {
-    try{
-    let Blog = req.body
-    let authorId= await authorModel.findById({_id:Blog.authorId})
-    if(!authorId){
-       return res.status(400).send({msg:"AuthorId is Invalid"})
+const createBlog = async function (req, res) {
+    try {
+        let Blog = req.body;
+        // if(!(Blog.authorId==req.decodedToken)){res.send({msg:"author unauthorised"})}
+        let published = req.body.published;
+
+        if (!Blog.authorId) {
+            res.status(400).send({ msg: "AuthorId is not present" });
+        }
+        let authorId = await authorModel.findById({ _id: Blog.authorId });
+        if (!authorId) {
+            res.status(400).send({ msg: "AuthorId is Invalid" });
+        }
+
+        let BlogCreated = await blog.create(Blog);
+        res.status(201).send({ data: BlogCreated });
+        if (!Blog) {
+            res.status(404).send({ msg: "This is Invalid Request", status: false });
+        }
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send({ msg: err.message });
     }
+};
+
+// const createBlog= async function (req, res) {
+//     try{
+//     let Blog = req.body
+//     let authorId= await authorModel.findById({_id:Blog.authorId})
+//     if(!authorId){
+//        return res.status(400).send({msg:"AuthorId is Invalid"})
+//     }
     
 
-    let BlogCreated = await blog.create(Blog);
-   res.status(201).send({ data: BlogCreated });
-    if (!Blog) {
-     return res.status(404).send({ msg: "This is Invalid Request", status: false });
-    }
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).send({ msg: err.message });
-  }
+//     let BlogCreated = await blog.create(Blog);
+//    res.status(201).send({ data: BlogCreated });
+//     if (!Blog) {
+//      return res.status(404).send({ msg: "This is Invalid Request", status: false });
+//     }
+//   } catch (err) {
+//     console.log(err.message);
+//     res.status(500).send({ msg: err.message });
+//   }
 
-}
+// }
 
 
 //=====================UpdateBlog========================================
@@ -336,30 +359,30 @@ const isValidObjectId = function (objectId) {
 }
 //-------------token Creation & Login------------------------ 
 
-const authorLogin = async function (req, res) {
-    let userName = req.body.email;
-    let password = req.body.password;
+// const authorLogin = async function (req, res) {
+//     let userName = req.body.email;
+//     let password = req.body.password;
   
-    let author = await authorModel.findOne({ email: userName, password: password });
-    if (!author)
-      return res.status(404).send({
-        status: false,
-        msg: "Username or the Password is invalid",
-      });
+//     let author = await authorModel.findOne({ email: userName, password: password });
+//     if (!author)
+//       return res.status(404).send({
+//         status: false,
+//         msg: "Username or the Password is invalid",
+//       });
   
-    //----------token Generation-------------------
-    let token = jwt.sign(
-      {//--------Payload--------------------
-        Member1:"Neha Verma",
-        Member2:"Sumit Negi",
-        Member3:"Saurav Kumar",
-        Member4:"Rahul Kumar",
-      },//---------------------------Secret Key -----------------------------
-      "Blogging-Mini-Site(Project1)"
-    );
-    res.setHeader("x-api-key", token);
-    res.status(200).send({ status: true, data: token });
-  };
+//     //----------token Generation-------------------
+//     let token = jwt.sign(
+//       {//--------Payload--------------------
+//         Member1:"Neha Verma",
+//         // Member2:"Sumit Negi",
+//         // Member3:"Saurav Kumar",
+//         // Member4:"Rahul Kumar",
+//       },//---------------------------Secret Key -----------------------------
+//       "Blogging-Mini-Site(Project1)"
+//     );
+//     res.setHeader("x-api-key", token);
+//     res.status(200).send({ status: true, data: token });
+//   };
 
 
 
@@ -368,4 +391,4 @@ module.exports.updatedBlog= updatedBlog
 module.exports.deleteBlog= deleteBlog
 module.exports.deleteBlog2= deleteBlog2
 module.exports.getblog= getblog
-module.exports.authorLogin= authorLogin
+//module.exports.authorLogin= authorLogin
