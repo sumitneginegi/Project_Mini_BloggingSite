@@ -4,7 +4,8 @@ const router = express.Router();
 
 const authorController = require("../controllers/authorController");
 const blogController = require("../controllers/blogController");
-constjwt=require('jsonwebtoken');
+const middleware=require("../middleware/middleware.js")
+
 
 
 
@@ -15,14 +16,14 @@ router.get("/test-me", function (req, res) {
 
 
 router.post("/authors", authorController.createAuthor);
-router.post("/blogs", blogController.createBlog);
-router.put("/blogs/:blogId",blogController.updatedBlog)
+router.post("/blogs",middleware.authenticate, blogController.createBlog);
+router.put("/blogs/:blogId",middleware.authenticate,blogController.updatedBlog)
 
-router.delete("/blogs/:blogId",blogController.deleteBlog)
+router.delete("/blogs/:blogId",middleware.authenticate,blogController.deleteBlog)
+router.get("/blogs",middleware.authenticate,blogController.getblog)
+router.delete("/blogs",middleware.authenticate,blogController.deleteBlog2)
+router.post("/login",authorController.authorLogin)
 
-router.get("/blogs",blogController.getblog)
-router.delete("/blogs",blogController.deleteBlog2)
-router.post("/login",blogController.authorLogin)
 
 
 
