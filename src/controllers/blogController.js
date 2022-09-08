@@ -1,7 +1,7 @@
 
 const blog = require("../models/blogModel")
 const authorModel = require("../models/authorModel");
-const { default: mongoose } = require('mongoose')
+const  mongoose = require('mongoose')
 const jwt=  require("jsonwebtoken")
 
 
@@ -29,29 +29,137 @@ const createBlog= async function (req, res) {
 
 //=====================UpdateBlog========================================
 const updatedBlog = async function (req, res) {
+    try {
+        const isValid = function (value) {
+            if (typeof value === "undefined" || value === null) return false;
+            if (typeof value === "string" && value.trim().length > 0) return true; // validation of string or not            return false;
+        };
+        const isValidRequest = function (object) {
+            return Object.keys(object).length > 0         //validation of keys 
+        };
+        const isValidObjectId = function (objectId) {
+            return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
+        };
 
-    try{
-        let blogId = req.params.blogId
-        let blogs = await blog.findById({_id:blogId})
-        if(!blogs) { 
-      
-            return res.status(404).send({status: false, message: "This blog does not exists"})
+        const blogId = req.params["blogId"]
+        const requestBody = req.body;
+        const queryParams = req.query;
+
+        if (isValidRequest(queryParams)) {
+            return res
+                .status(400)
+                .send({ status: false, message: "invalid request" })
         }
-        
-        let updatedBlog = await blog.findOneAndUpdate(
-            {_id:blogId}, //condition 
-            {$set:{published: true,title: "Silent Sea" }}, //update
-            {new: true})// return updated value
 
-       res.status(200).send({status:true,data:{updatedBlog},publishedAt:Date()})    
-      
-      }
+        if (!isValidRequest(requestBody)) {
+            return res
+                .status(400)
+                .send({ status: false, message: "blog details are required for update" })
+        }
 
-    catch (err) {
-        console.log(err.message)
-        res.status(500).send({ msg: err.message })
+        if (!isValidObjectId(blogId)) {
+            return res
+                .status(400)
+                .send({ status: false, message: "Enter a valid blogId" })
+        }
+
+        const blogByBlogID = await blog.findOne({
+            _id: blogId,
+            isDeleted: false,
+            deletedAt: null
+        });
+
+        if (!blogByBlogID) {
+            return res
+                .status(400)
+                .send({ status: false, message: 'no blog found by ${blogId}' });
+        }
+
+        //using destructuring then validating selected keys by user
+        const { title, body, tags, subcategory } = requestBody;
+
+        //update object has been created with two properties. if updating key is to be replaced && type is string then will be added to $set and if it is to be added && type is an array then will be added to $addToSet
+
+        const update = {
+            $set: { published: true, publishedAt: Date.now() },
+            $addToSet: {}
+        };
+
+        if (requestBody.hasOwnProperty("title")) {
+            if (!isValid(title)) {
+                return res
+                    .status(400)
+                    .send({ status: false, message: "blog title should be in valid format" });
+            }
+            update.$set["title"] = title.trim();
+        }
+
+        if (requestBody.hasOwnProperty("body")) {
+            if (!isValid(body)) {
+                return res
+                    .status(400)
+                    .send({ status: false, message: "blog body should be in valid format" });
+            }
+            update.$set["body"] = body.trim();
+        }
+
+        if (requestBody.hasOwnProperty("tags")) {
+            if (Array.isArray(tags)) {
+                for (let i = 0; i < tags.length; i++) {
+                    if (!isValid(tags[i])) {
+                        return res
+                            .status(400)
+                            .send({ status: false, message: "Blog tags must be in valid format" });
+                    }
+                }
+                update.$addToSet["tags"] = { $each: tags };
+            } else {
+                if (!isValid(tags)) {
+                    return res
+                        .status(400)
+                        .send({ status: false, message: "blog tags must be in valid format" })
+                }
+                update.$addToSet["tags"] = tags.trim();
+            }
+        }
+
+        if (requestBody.hasOwnProperty("subcategory")) {
+            if (Array.isArray(subcategory)) {
+                for (let i = 0; i < subcategory.length; i++) {
+                    if (!isValid(subcategory[i])) {
+                        return res
+                            .status(400)
+                            .send({ status: false, message: "Blog subcategory must be in valid format" });
+                    }
+                }
+                update.$addToSet["subcategory"] = { $each: subcategory };
+            } else {
+                if (!isValid(subcategory)) {
+                    return res
+                        .status(400)
+                        .send({ status: false, message: "blog subcategory must be in valid format" })
+                }
+                update.$addToSet["subcategory"] = subcategory.trim();
+            }
+        }
+
+        const updatedBlog = await blog.findOneAndUpdate(
+            { _id: blogId, isDeleted: false, deletedAt: null },
+            update,
+            { new: true }
+        )
+
+        res
+            .status(200)
+            .send({ status: true, message: "blog updated successfully", data: updatedBlog });
+
+    } catch (error) {
+
+        res.status(500).send({ error: error.message })
+
     }
 }
+
 //=========================
 
 const deleteBlog = async function(req, res) {    
@@ -131,8 +239,8 @@ const isValidObjectId = function (objectId) {
 
         //conditions to find all not deleted blogs
         const filterCondition = {
-            isDeleted: false,
-            isPublished: true,
+            Deleted: false,
+            Published: true,
             deletedAt: null
         };
 
