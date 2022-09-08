@@ -1,6 +1,6 @@
 const blog = require("../models/blogModel")
 const authorModel = require("../models/authorModel")
-constjwt=require('jsonwebtoken');
+constjwt = require('jsonwebtoken');
 
 
 const mongoose = require('mongoose')
@@ -48,7 +48,7 @@ const updatedBlog = async function (req, res) {
 
         let updatedBlog = await blog.findOneAndUpdate(
             { _id: blogId }, //condition 
-            { $set: { published: true, title: "Silent Sea"} }, //update
+            {$set: { published: true, title: "Silent Sea"} }, //update
             { new: true })// return updated value
 
         res.status(200).send({ status: true, data: { updatedBlog }, publishedAt: Date() })
@@ -60,7 +60,7 @@ const updatedBlog = async function (req, res) {
         res.status(500).send({ msg: err.message })
     }
 }
-//=========================
+//========================delete api path params=========================
 
 const deleteBlog = async function (req, res) {
     let blogId = req.params.blogId
@@ -87,7 +87,7 @@ const deleteBlog = async function (req, res) {
 const deleteBlog2 = async function (req, res) {
     try {
         let data = req.query
-        let { authorId, category, tags, subcategory, published } = data
+        let { authorId, category, tags, subcategory,published } = data
         let isValid = mongoose.Types.ObjectId.isValid(authorId)
         if (Object.keys(data).length === 0) {
             return res.status(400).send({ status: false, message: "Please give some parameters to check" })
@@ -271,38 +271,38 @@ const getblog = async function (req, res) {
 //===============================authorLogin===============================
 
 
-    const authorLogin = async function (req, res) {
-        try {
-            let userName = req.body.email;
-            let password = req.body.password;
+const authorLogin = async function (req, res) {
+    try {
+        let userName = req.body.email;
+        let password = req.body.password;
 
-            let author = await authorModel.findOne({ email: userName, password: password });
-            if (!author)
-                return res.status(404).send({
-                    status: false,
-                    msg: "Username or the Rassword is invalid",
-                });
+        let author = await authorModel.findOne({ email: userName, password: password });
+        if (!author)
+            return res.status(404).send({
+                status: false,
+                msg: "Username or the Rassword is invalid",
+            });
 
 
-            let token = jwt.sign(
-                {//--------Payload--------------------
-                    Member1: "Neha Verma",
-                    Member2: "Sumit Negi",
-                    Member3: "Saurav Kumar",
-                    Member4: "Rahul Kumar",
-                },//---------------------------Secret Key -----------------------------
-                "Blogging-Mini-Site(Project1)"
-            );
-            res.setHeader("x-api-key", token);
-            res.send({ status: true, data: token });
-        }
-        catch (error) {
+        let token = jwt.sign(
+            {//--------Payload--------------------
+                Member1: "Neha Verma",
+                Member2: "Sumit Negi",
+                Member3: "Saurav Kumar",
+                Member4: "Rahul Kumar",
+            },//---------------------------Secret Key -----------------------------
+            "Blogging-Mini-Site(Project1)"
+        );
+        res.setHeader("x-api-key", token);
+        res.send({ status: true, data: token });
+    }
+    catch (error) {
 
-            res.status(500).send({ error: error.message })
-
-        }
+        res.status(500).send({ error: error.message })
 
     }
+
+}
 
 
 
