@@ -1,5 +1,5 @@
 const AuthorModel=require("../models/authorModel")
-
+const jwt=  require("jsonwebtoken")
 const createAuthor= async function (req, res) {
     try{
     let author = req.body
