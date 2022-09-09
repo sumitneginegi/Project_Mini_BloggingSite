@@ -27,16 +27,17 @@ const authorLogin = async function (req, res) {
         if (!author)
             return res.status(404).send({
                 status: false,
-                msg: "Username or the Rassword is invalid",
-            });
-
+                msg: "Username or the Password is invalid",
+            });   
 
         let token = jwt.sign(
             {//--------Payload--------------------
+                authorId: author._id,
                 Member1: "Neha Verma",
                 Member2: "Sumit Negi",
                 Member3: "Saurav Kumar",
                 Member4: "Rahul Kumar",
+              
             },//---------------------------Secret Key -----------------------------
             "Blogging-Mini-Site(Project1)"
         );

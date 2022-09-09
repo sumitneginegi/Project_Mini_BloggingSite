@@ -9,7 +9,8 @@ const mongoose = require('mongoose')
 const createBlog = async function (req, res) {
     try {
         let Blog = req.body;
-        let published = req.body.published;
+        // if(!(Blog.authorId==req.decodedToken)){res.send({msg:"author unauthorised"})}
+        //let published = req.body.published;
 
         if (!Blog.authorId) {
             res.status(400).send({ msg: "AuthorId is not present" });
@@ -346,7 +347,7 @@ const getblog = async function (req, res) {
             }
 
             const filetredBlogs = await blog.find(filterCondition)
-
+            
             if (filetredBlogs.length == 0) {
                 return res
                     .status(404)
