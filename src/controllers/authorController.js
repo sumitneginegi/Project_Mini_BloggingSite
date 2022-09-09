@@ -1,7 +1,11 @@
 const AuthorModel=require("../models/authorModel")
+<<<<<<< HEAD
 const jwt = require('jsonwebtoken');
 
 
+=======
+const jwt=  require("jsonwebtoken")
+>>>>>>> 40e2304c47ee4430057c467e1c54751a15bbba82
 const createAuthor= async function (req, res) {
     try{
     let author = req.body
@@ -12,6 +16,7 @@ const createAuthor= async function (req, res) {
     }
 }
 
+<<<<<<< HEAD
 
 
 
@@ -51,9 +56,19 @@ const authorLogin = async function (req, res) {
     }
 
 }
+=======
+/*const getAuthorsData= async function (req, res) {
+    let authors = await AuthorModel.find()
+    res.send({data: authors})
+}*/
+>>>>>>> 40e2304c47ee4430057c467e1c54751a15bbba82
 
 
 
 
 module.exports.createAuthor= createAuthor
+<<<<<<< HEAD
 module.exports.authorLogin = authorLogin
+=======
+//module.exports.getAuthorsData= getAuthorsData
+>>>>>>> 40e2304c47ee4430057c467e1c54751a15bbba82
