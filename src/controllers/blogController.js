@@ -8,10 +8,13 @@ const jwt=  require("jsonwebtoken")
 const createBlog= async function (req, res) {
     try{
     let Blog = req.body
+    
     let authorId= await authorModel.findById({_id:Blog.authorId})
     if(!authorId){
         res.status(400).send({msg:"AuthorId is Invalid"})
     }
+    
+    
     
 
     let BlogCreated = await blog.create(Blog);
@@ -367,10 +370,8 @@ const authorLogin = async function (req, res) {
     
     let token = jwt.sign(
       {//--------Payload--------------------
-        Member1:"Neha Verma",
-        Member2:"Sumit Negi",
-        Member3:"Saurav Kumar",
-        Member4:"Rahul Kumar",
+        authorId: author._id.toString()
+
       },//---------------------------Secret Key -----------------------------
       "Blogging-Mini-Site(Project1)"
     );
