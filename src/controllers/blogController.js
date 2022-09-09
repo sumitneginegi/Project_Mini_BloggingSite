@@ -1,30 +1,49 @@
 
-const blog = require("../models/blogModel")
+const blogs = require("../models/blogModel")
 const authorModel = require("../models/authorModel");
 const  mongoose = require('mongoose')
 const jwt=  require("jsonwebtoken")
+const ObjectId = require('mongoose').Types.ObjectId
+
 
 //===============================createblog======================//
-
-const createBlog= async function (req, res) {
-    try{
-    let Blog = req.body
-    
-    let authorId= await authorModel.findById({_id:Blog.authorId})
-    if(!authorId){
-        res.status(400).send({msg:"AuthorId is Invalid"})
+const createBlog = async function (req, res) {
+    try {
+      let blog = req.body
+      if (Object.keys(blog).length == 0) {
+        return res.status(400).send({ status: false, msg: "No data to create a blog" })
+      }
+      let author_id = blog.authorId
+      if (!author_id) {
+        return res.status(400).send({ status: false, msg: "Author Id should be present in the blog data" })
+      }
+      if (!ObjectId.isValid(author_id)) {
+        return res.status(404).send({ status: false, msg: "AuthorId invalid" });
+      }
+      let validAuthor = await authorModel.findById(author_id)
+      if (!validAuthor) {
+        return res.status(404).send({ status: false, msg: "Author data not found" });
+      }
+      let token = req.headers["x-api-key"]
+      let decodedToken = jwt.verify(token, "Blogging-Mini-Site(Project1)" );
+      let authorLoggedIn = decodedToken.authorId
+      if (authorLoggedIn != author_id) {
+        return res.status(403).send({ status: false, msg: "Author logged in cannot create blog with another author's Id" })
+      }
+      let is_published = blogs.published
+      if (is_published == true) {
+        blog.publishedAt = new Date()
+        let blogCreated = await blogs.create(blog)
+        return res.status(201).send({ status: true, data: blogCreated })
+      }
+      let blogCreated = await blogs.create(blog)
+      return res.status(201).send({ status: true, data: blogCreated })
+    } catch (error) {
+      return res.status(500).send({ status: false, msg: error.message })
     }
-    let BlogCreated = await blog.create(Blog);
-    res.status(201).send({ data: BlogCreated });
-    if (!Blog) {
-      res.status(404).send({ msg: "This is Invalid Request", status: false });
-    }
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).send({ msg: err.message });
   }
+  
 
-}
 //=====================getblog========================//
 
 const getblog = async function (req, res) {
@@ -45,7 +64,7 @@ const isValidObjectId = function (objectId) {
         //conditions to find all not deleted blogs
         const filterCondition = {
             Deleted: false,
-            Published: true,
+            published: true,
             deletedAt: null
         };
 
@@ -125,7 +144,7 @@ const isValidObjectId = function (objectId) {
                 }
             }
 
-            const filetredBlogs = await blog.find(filterCondition)
+            const filetredBlogs = await blogs.find(filterCondition)
 
             if (filetredBlogs.length == 0) {
                 return res
@@ -197,7 +216,7 @@ const updatedBlog = async function (req, res) {
                 .send({ status: false, message: "Enter a valid blogId" })
         }
 
-        const blogByBlogID = await blog.findOne({
+        const blogByBlogID = await blogs.findOne({
             _id: blogId,
             isDeleted: false,
             deletedAt: null
@@ -277,7 +296,7 @@ const updatedBlog = async function (req, res) {
             }
         }
 
-        const updatedBlog = await blog.findOneAndUpdate(
+        const updatedBlog = await blogs.findOneAndUpdate(
             { _id: blogId, isDeleted: false, deletedAt: null },
             update,
             { new: true }
@@ -298,13 +317,13 @@ const updatedBlog = async function (req, res) {
 
 const deleteBlog = async function(req, res) {    
     let blogId = req.params.blogId
-    let blogs = await blog.findOneAndUpdate({_id:blogId},{Deleted:true},{new:true})
+    let blog1 = await blogs.findOneAndUpdate({_id:blogId},{Deleted:true},{new:true})
     if(!blogs) { 
   
         return res.status(404).send({status: false, message: "Blog is not found"})
     }
          
-   res.status(200).send({status:true,data:blogs,deletedAt:Date()})    
+   res.status(200).send({status:true,data:blog1,deletedAt:Date()})    
   
   
   
