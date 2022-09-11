@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const blogModel = require('../models/blogModel');
-const authorModel = require('../models/authorModel');
+//const authorModel = require('../models/authorModel');
 const ObjectId = require('mongoose').Types.ObjectId
 
 const authentication = async function (req, res, next) {
