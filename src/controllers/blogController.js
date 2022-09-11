@@ -237,7 +237,7 @@ const updatedBlog = async function (req, res) {
         if (!blogByBlogID) {
             return res
                 .status(400)
-                .send({ status: false, message: 'no blog found by ${blogId}' });
+                .send({ status: false, message: `no blog found by ${blogId}`});
         }
 
         //using destructuring then validating selected keys by user
@@ -328,18 +328,60 @@ const updatedBlog = async function (req, res) {
 //=========================deleteblog=================//
 
 const deleteBlog = async function(req, res) {    
-    let blogId = req.params.blogId
-    let blog1 = await blogs.findOneAndUpdate({_id:blogId},{Deleted:true},{new:true})
-    if(!blogs) { 
-  
-        return res.status(404).send({status: false, message: "Blog is not found"})
+   
+  try {
+
+    const requestBody = req.body;
+    const queryParams = req.query;
+    const blogId = req.params.blogId;
+
+    if (isValidRequest(queryParams)) {
+        return res
+            .status(400)
+            .send({ status: false, message: "invalid Request" });
     }
-         
-   res.status(200).send({status:true,data:blog1,deletedAt:Date()})    
-  
-  
-  
-  }
+
+    if (isValidRequest(requestBody)) {
+        return res
+            .status(400)
+            .send({ status: false, message: "invalid Request" });
+    }
+
+    if (!isValidObjectId(blogId)) {
+        return res
+            .status(400)
+            .send({ status: false, message: `${id}  not a valid blogID` });
+    }
+
+    const blogById = await blogs.findOne({
+        _id: blogId,
+        Deleted: false,
+        deletedAt: null
+    })
+
+    if (!blogById) {
+        return res
+            .status(404)
+            .send({ status: false, message: `no blog found by ${blogId}` })
+    }
+
+    await blogs.findByIdAndUpdate(
+        { _id: blogId },
+        { $set: { Deleted: true, deletedAt: Date.now() } },
+        { new: true }
+    );
+
+    res
+        .status(200)
+        .send({ status: true, message: "blog is deleted" });
+
+} catch (error) {
+
+    res.status(500).status({ status: false, message: error.message })
+
+}
+}
+
 //====================================delete query param================//
 
   const deleteBlog2 = async function(req, res) {    
@@ -367,7 +409,11 @@ const deleteBlog = async function(req, res) {
                 return res.status(404).send({ status: false, message: "No such data found" })
             } else {
                 let deletedData = await blogs.updateMany( filter,{Deleted: true  ,deletedAt:Date() }, {new: true })
+<<<<<<< HEAD
             let deletedAt=Date() 
+=======
+           // let deletedAt=Date() 
+>>>>>>> e081105b93c81ec6896a8ef4619567e9aac48c26
              return res.status(200).send({ status: true, msg: "data deleted successfully", data:deletedData,deletedAt })
             }
         }
@@ -376,7 +422,12 @@ const deleteBlog = async function(req, res) {
         }
       }
   
+<<<<<<< HEAD
  
+=======
+  
+
+>>>>>>> e081105b93c81ec6896a8ef4619567e9aac48c26
 //-------------token Creation & Login------------------------ 
 
  const authorLogin = async function (req, res) {
