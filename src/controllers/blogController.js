@@ -157,7 +157,7 @@ const isValidObjectId = function (objectId) {
 
             //if no queryParams are provided then finding all not deleted blogs
         } else {
-            const allBlogs = await blog.find(filterCondition);
+            const allBlogs = await blogs.find(filterCondition);
 
             if (allBlogs.length == 0) {
                 return res
@@ -198,7 +198,7 @@ const updatedBlog = async function (req, res) {
         const requestBody = req.body;
         const queryParams = req.query;
 
-        if (isValidRequest(queryParams)) {
+        if (!isValidRequest(queryParams)) {
             return res
                 .status(400)
                 .send({ status: false, message: "invalid request" })
@@ -317,7 +317,14 @@ const updatedBlog = async function (req, res) {
 
 const deleteBlog = async function(req, res) {    
    
-  try {
+  try { 
+   
+const isValidRequest = function (object) {
+    return Object.keys(object).length > 0         //validation of keys 
+};
+const isValidObjectId = function (objectId) {
+    return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
+};
 
     const requestBody = req.body;
     const queryParams = req.query;
@@ -397,7 +404,7 @@ const deleteBlog = async function(req, res) {
                 return res.status(404).send({ status: false, message: "No such data found" })
             } else {
                 let deletedData = await blogs.updateMany( filter,{Deleted: true  ,deletedAt:Date() }, {new: true })
-           // let deletedAt=Date() 
+            let deletedAt=Date() 
              return res.status(200).send({ status: true, msg: "data deleted successfully", data:deletedData,deletedAt })
             }
         }
