@@ -1,5 +1,11 @@
 const AuthorModel=require("../models/authorModel")
 const jwt=  require("jsonwebtoken")
+<<<<<<< HEAD
+=======
+
+//=========================================================================//
+
+>>>>>>> e087cd453e0d477c10dd6897793d74891946ce60
 const isValid = function (value) {
     if (typeof value === "undefined" || value === null) return false;
     if (typeof value === "string" && value.trim().length > 0) return true;
@@ -85,10 +91,10 @@ const isValid = function (value) {
           .send({ status: false, message: "Email already exits" });
       }
   
-      if (!isValid(password)) {
+      if (!regixValidator(password)) {
         return res
           .status(400)
-          .send({ status: false, message: "password is required" })
+          .send({ status: false, message: "password is required in correct format" })
       }
   
       const authorData = {
@@ -110,9 +116,65 @@ const isValid = function (value) {
   
     }
   }
+//===================================login author===================//
+
+const authorLogin = async function (req, res) {
+  try{
+    
+
+  let userName = req.body.email;
+  let password = req.body.password;
+
+  if (!isValidEmail(userName)) {
+    return res
+      .status(400)
+      .send({ status: false, message: "Enter a valid email address" })
+  }
+  if (!regixValidator(password)) {
+    return res
+      .status(400)
+      .send({ status: false, message: "password is required in correct format" })
+  }
+
+
+
+  let author = await AuthorModel.findOne({ email: userName, password: password });
+ if (!author)
+   return res.status(404).send({
+      status: false,
+   msg: "Username or the Password is invalid",
+   });
+
+ 
+ let token = jwt.sign(
+   {//--------Payload--------------------
+     authorId: author._id.toString()
+
+   },//---------------------------Secret Key -----------------------------
+   "Blogging-Mini-Site(Project1)"
+ );
+ res.setHeader("x-api-key", token);
+ res.send({ status: true, data: token });
+ 
+ }
+ catch (err) {
+  res.status(500).send({ err: err.message })
+
+}
+}
+
+
+
+
+
   
 
 
 
+<<<<<<< HEAD
 module.exports.createAuthor  = createAuthor
+=======
+module.exports.createAuthor= createAuthor
+module.exports.authorLogin= authorLogin
+>>>>>>> e087cd453e0d477c10dd6897793d74891946ce60
 

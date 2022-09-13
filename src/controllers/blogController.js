@@ -2,6 +2,7 @@ const blogs = require("../models/blogModel")
 const authorModel = require("../models/authorModel");
 const  mongoose = require('mongoose')
 const jwt=  require("jsonwebtoken")
+
 const ObjectId = require('mongoose').Types.ObjectId
 
 
@@ -52,6 +53,7 @@ const createBlog = async function (req, res) {
 
 const getblog = async function (req, res) {
     try {
+<<<<<<< HEAD
 
 
 
@@ -70,6 +72,19 @@ const getblog = async function (req, res) {
 
 
         const requestBody = req.body;
+=======
+const isValid = function (value) {
+    if (typeof value === "undefined" || value === null) return false;
+    if (typeof value === "string" && value.trim().length > 0) return true; // validation of string or not            return false;
+};
+const isValidRequest = function (object) {
+    return Object.keys(object).length > 0         //validation of keys 
+};
+const isValidObjectId = function (objectId) {
+    return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
+};
+       // const requestBody = req.body;
+>>>>>>> e087cd453e0d477c10dd6897793d74891946ce60
         const queryParams = req.query;
 
         //conditions to find all not deleted blogs
@@ -79,11 +94,11 @@ const getblog = async function (req, res) {
             deletedAt: null
         };
 
-        if (isValidRequest(requestBody)) {          //  validation  of req body
+       /* if (isValidRequest(requestBody)) {          //  validation  of req body
             return res
                 .status(400)
                 .send({ status: false, message: "data is required in body" });
-        }
+        }*/
 
         //if queryParams are present then each key to be validated then only to be added to filterCondition object. on that note filtered blogs to be returened
         if (isValidRequest(queryParams)) {
@@ -164,7 +179,7 @@ const getblog = async function (req, res) {
             }
             res
                 .status(200)
-                .send({ status: true, message: "filtered blog list", blogsCounts: filetredBlogs.length, blogList: filetredBlogs })
+                .send({ status: true, message: "filtered blog list", blogsCounts: filetredBlogs.length, data: filetredBlogs })
 
             //if no queryParams are provided then finding all not deleted blogs
         } else {
@@ -177,7 +192,7 @@ const getblog = async function (req, res) {
             }
             res
                 .status(200)
-                .send({ status: true, message: "blogs list", blogsCount: allBlogs.length, blogsList: allBlogs });
+                .send({ status: true, message: "blogs list", blogsCount: allBlogs.length, data: allBlogs });
         }
 
     } catch (error) {
@@ -210,11 +225,11 @@ const updatedBlog = async function (req, res) {
         const requestBody = req.body;
         const queryParams = req.query;
 
-        if (isValidRequest(queryParams)) {
+        /*if (!isValidRequest(queryParams)) {
             return res
                 .status(400)
                 .send({ status: false, message: "invalid request" })
-        }
+        }*/
 
         if (!isValidRequest(requestBody)) {
             return res
@@ -328,6 +343,7 @@ const updatedBlog = async function (req, res) {
 //=========================deleteblog=================//
 const deleteBlog = async function(req, res) {    
    
+<<<<<<< HEAD
     try { 
      
   const isValidRequest = function (object) {
@@ -388,6 +404,67 @@ const deleteBlog = async function(req, res) {
   }
   }
 
+=======
+  try { 
+   
+const isValidRequest = function (object) {
+    return Object.keys(object).length > 0         //validation of keys 
+};
+const isValidObjectId = function (objectId) {
+    return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
+};
+
+    const requestBody = req.body;
+    const queryParams = req.query;
+    const blogId = req.params.blogId;
+
+    if (isValidRequest(queryParams)) {
+        return res
+            .status(400)
+            .send({ status: false, message: "invalid Request" });
+    }
+
+    if (isValidRequest(requestBody)) {
+        return res
+            .status(400)
+            .send({ status: false, message: "invalid Request" });
+    }
+
+    if (!isValidObjectId(blogId)) {
+        return res
+            .status(400)
+            .send({ status: false, message: `${id}  not a valid blogID` });
+    }
+
+    const blogById = await blogs.findOne({
+        _id: blogId,
+        Deleted: false,
+        deletedAt: null
+    })
+
+    if (!blogById) {
+        return res
+            .status(404)
+            .send({ status: false, message: `no blog found by ${blogId}` })
+    }
+
+    await blogs.findByIdAndUpdate(
+        { _id: blogId },
+        { $set: { Deleted: true, deletedAt: Date.now() } },
+        { new: true }
+    );
+
+    res
+        .status(200)
+        .send({ status: true, message: "blog  not exist" });
+
+} catch (error) {
+
+    res.status(500).status({ status: false, message: error.message })
+
+}
+}
+>>>>>>> e087cd453e0d477c10dd6897793d74891946ce60
 
 //====================================delete query param================//
 
@@ -428,31 +505,9 @@ const deleteBlog = async function(req, res) {
  
 //-------------token Creation & Login------------------------ 
 
- const authorLogin = async function (req, res) {
-     let userName = req.body.email;
-     let password = req.body.password;
-  
-     let author = await authorModel.findOne({ email: userName, password: password });
-    if (!author)
-      return res.status(404).send({
-         status: false,
-      msg: "Username or the Password is invalid",
-      });
-  
-    
-    let token = jwt.sign(
-      {//--------Payload--------------------
-        authorId: author._id.toString()
-
-      },//---------------------------Secret Key -----------------------------
-      "Blogging-Mini-Site(Project1)"
-    );
-    res.setHeader("x-api-key", token);
-    res.send({ status: true, data: token });
-    
-    }
 
 
+<<<<<<< HEAD
 
 
 module.exports.createBlog = createBlog
@@ -462,4 +517,11 @@ module.exports.deleteBlog2 = deleteBlog2
 module.exports.getblog = getblog
 module.exports.authorLogin = authorLogin
 
+=======
+module.exports.createBlog= createBlog
+module.exports.updatedBlog= updatedBlog
+module.exports.deleteBlog= deleteBlog
+module.exports.deleteBlog2= deleteBlog2
+module.exports.getblog= getblog
+>>>>>>> e087cd453e0d477c10dd6897793d74891946ce60
 
