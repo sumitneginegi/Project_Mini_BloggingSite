@@ -1,11 +1,5 @@
 const AuthorModel=require("../models/authorModel")
 const jwt=  require("jsonwebtoken")
-<<<<<<< HEAD
-=======
-
-//=========================================================================//
-
->>>>>>> e087cd453e0d477c10dd6897793d74891946ce60
 const isValid = function (value) {
     if (typeof value === "undefined" || value === null) return false;
     if (typeof value === "string" && value.trim().length > 0) return true;
@@ -171,10 +165,6 @@ const authorLogin = async function (req, res) {
 
 
 
-<<<<<<< HEAD
-module.exports.createAuthor  = createAuthor
-=======
 module.exports.createAuthor= createAuthor
 module.exports.authorLogin= authorLogin
->>>>>>> e087cd453e0d477c10dd6897793d74891946ce60
 

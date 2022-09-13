@@ -1,6 +1,10 @@
 const jwt = require("jsonwebtoken");
 const blogModel = require('../models/blogModel');
+const authorModel = require('../models/authorModel');
 const ObjectId = require('mongoose').Types.ObjectId
+
+
+
 
 const authentication = async function (req, res, next) {
     try {
@@ -20,6 +24,10 @@ const authentication = async function (req, res, next) {
         res.status(500).send({ status: false, msg: error.message })
     }
 }
+
+
+
+
 
 const authorisation = async function (req, res, next) {
     try {

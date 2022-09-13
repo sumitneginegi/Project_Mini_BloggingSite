@@ -53,26 +53,6 @@ const createBlog = async function (req, res) {
 
 const getblog = async function (req, res) {
     try {
-<<<<<<< HEAD
-
-
-
-
-        const isValid = function (value) {
-            if (typeof value === "undefined" || value === null) return false;
-            if (typeof value === "string" && value.trim().length > 0) return true; // validation of string or not            return false;
-        };
-        const isValidRequest = function (object) {
-            return Object.keys(object).length > 0         //validation of keys 
-        };
-        const isValidObjectId = function (objectId) {
-            return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
-        };
-
-
-
-        const requestBody = req.body;
-=======
 const isValid = function (value) {
     if (typeof value === "undefined" || value === null) return false;
     if (typeof value === "string" && value.trim().length > 0) return true; // validation of string or not            return false;
@@ -84,7 +64,6 @@ const isValidObjectId = function (objectId) {
     return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
 };
        // const requestBody = req.body;
->>>>>>> e087cd453e0d477c10dd6897793d74891946ce60
         const queryParams = req.query;
 
         //conditions to find all not deleted blogs
@@ -343,7 +322,6 @@ const updatedBlog = async function (req, res) {
 //=========================deleteblog=================//
 const deleteBlog = async function(req, res) {    
    
-<<<<<<< HEAD
     try { 
      
   const isValidRequest = function (object) {
@@ -387,84 +365,23 @@ const deleteBlog = async function(req, res) {
               .send({ status: false, message: `no blog found by ${blogId}` })
       }
   
-      await blogs.findByIdAndUpdate(
+     let deletedData= await blogs.findByIdAndUpdate(
           { _id: blogId },
-          { $set: { Deleted: true, deletedAt: Date.now() } },
+          { $set: { Deleted: true, deletedAt: Date() } },
           { new: true }
       );
+      let deletedAt=Date() 
   
       res
           .status(200)
-          .send({ status: true, message: "blog is deleted" });
+          .send({ status: true, msg: "data deleted successfully", data:deletedData,deletedAt});
   
   } catch (error) {
   
-      res.status(500).status({ status: false, message: error.message })
+      res.status(500).send({ status: false, message: error.message })
   
   }
   }
-
-=======
-  try { 
-   
-const isValidRequest = function (object) {
-    return Object.keys(object).length > 0         //validation of keys 
-};
-const isValidObjectId = function (objectId) {
-    return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
-};
-
-    const requestBody = req.body;
-    const queryParams = req.query;
-    const blogId = req.params.blogId;
-
-    if (isValidRequest(queryParams)) {
-        return res
-            .status(400)
-            .send({ status: false, message: "invalid Request" });
-    }
-
-    if (isValidRequest(requestBody)) {
-        return res
-            .status(400)
-            .send({ status: false, message: "invalid Request" });
-    }
-
-    if (!isValidObjectId(blogId)) {
-        return res
-            .status(400)
-            .send({ status: false, message: `${id}  not a valid blogID` });
-    }
-
-    const blogById = await blogs.findOne({
-        _id: blogId,
-        Deleted: false,
-        deletedAt: null
-    })
-
-    if (!blogById) {
-        return res
-            .status(404)
-            .send({ status: false, message: `no blog found by ${blogId}` })
-    }
-
-    await blogs.findByIdAndUpdate(
-        { _id: blogId },
-        { $set: { Deleted: true, deletedAt: Date.now() } },
-        { new: true }
-    );
-
-    res
-        .status(200)
-        .send({ status: true, message: "blog  not exist" });
-
-} catch (error) {
-
-    res.status(500).status({ status: false, message: error.message })
-
-}
-}
->>>>>>> e087cd453e0d477c10dd6897793d74891946ce60
 
 //====================================delete query param================//
 
@@ -507,21 +424,9 @@ const isValidObjectId = function (objectId) {
 
 
 
-<<<<<<< HEAD
-
-
-module.exports.createBlog = createBlog
-module.exports.updatedBlog = updatedBlog
-module.exports.deleteBlog = deleteBlog
-module.exports.deleteBlog2 = deleteBlog2
-module.exports.getblog = getblog
-module.exports.authorLogin = authorLogin
-
-=======
 module.exports.createBlog= createBlog
 module.exports.updatedBlog= updatedBlog
 module.exports.deleteBlog= deleteBlog
 module.exports.deleteBlog2= deleteBlog2
 module.exports.getblog= getblog
->>>>>>> e087cd453e0d477c10dd6897793d74891946ce60
 
