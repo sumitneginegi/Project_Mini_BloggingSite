@@ -248,7 +248,7 @@ const updatedBlog = async function (req, res) {
         const update = {
             $set: { published: true, publishedAt: Date.now() },
             $addToSet: {}
-        };
+        };        
 
         if (requestBody.hasOwnProperty("title")) {
             if (!isValid(title)) {
@@ -326,61 +326,68 @@ const updatedBlog = async function (req, res) {
 }
 
 //=========================deleteblog=================//
-
 const deleteBlog = async function(req, res) {    
    
-  try {
+    try { 
+     
+  const isValidRequest = function (object) {
+      return Object.keys(object).length > 0         //validation of keys 
+  };
+  const isValidObjectId = function (objectId) {
+      return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
+  };
+  
+      const requestBody = req.body;
+      const queryParams = req.query;
+      const blogId = req.params.blogId;
+  
+      if (isValidRequest(queryParams)) {
+          return res
+              .status(400)
+              .send({ status: false, message: "invalid Request" });
+      }
+  
+      if (isValidRequest(requestBody)) {
+          return res
+              .status(400)
+              .send({ status: false, message: "invalid Request" });
+      }
+  
+      if (!isValidObjectId(blogId)) {
+          return res
+              .status(400)
+              .send({ status: false, message: `${id}  not a valid blogID` });
+      }
+  
+      const blogById = await blogs.findOne({
+          _id: blogId,
+          Deleted: false,
+          deletedAt: null
+      })
+  
+      if (!blogById) {
+          return res
+              .status(404)
+              .send({ status: false, message: `no blog found by ${blogId}` })
+      }
+  
+      await blogs.findByIdAndUpdate(
+          { _id: blogId },
+          { $set: { Deleted: true, deletedAt: Date.now() } },
+          { new: true }
+      );
+  
+      res
+          .status(200)
+          .send({ status: true, message: "blog is deleted" });
+  
+  } catch (error) {
+  
+      res.status(500).status({ status: false, message: error.message })
+  
+  }
+  }
 
-    const requestBody = req.body;
-    const queryParams = req.query;
-    const blogId = req.params.blogId;
-
-    if (isValidRequest(queryParams)) {
-        return res
-            .status(400)
-            .send({ status: false, message: "invalid Request" });
-    }
-
-    if (isValidRequest(requestBody)) {
-        return res
-            .status(400)
-            .send({ status: false, message: "invalid Request" });
-    }
-
-    if (!isValidObjectId(blogId)) {
-        return res
-            .status(400)
-            .send({ status: false, message: `${id}  not a valid blogID` });
-    }
-
-    const blogById = await blogs.findOne({
-        _id: blogId,
-        Deleted: false,
-        deletedAt: null
-    })
-
-    if (!blogById) {
-        return res
-            .status(404)
-            .send({ status: false, message: `no blog found by ${blogId}` })
-    }
-
-    await blogs.findByIdAndUpdate(
-        { _id: blogId },
-        { $set: { Deleted: true, deletedAt: Date.now() } },
-        { new: true }
-    );
-
-    res
-        .status(200)
-        .send({ status: true, message: "blog is deleted" });
-
-} catch (error) {
-
-    res.status(500).status({ status: false, message: error.message })
-
-}
-}
 
 //====================================delete query param================//
 
@@ -409,11 +416,7 @@ const deleteBlog = async function(req, res) {
                 return res.status(404).send({ status: false, message: "No such data found" })
             } else {
                 let deletedData = await blogs.updateMany( filter,{Deleted: true  ,deletedAt:Date() }, {new: true })
-<<<<<<< HEAD
             let deletedAt=Date() 
-=======
-           // let deletedAt=Date() 
->>>>>>> e081105b93c81ec6896a8ef4619567e9aac48c26
              return res.status(200).send({ status: true, msg: "data deleted successfully", data:deletedData,deletedAt })
             }
         }
@@ -422,12 +425,7 @@ const deleteBlog = async function(req, res) {
         }
       }
   
-<<<<<<< HEAD
  
-=======
-  
-
->>>>>>> e081105b93c81ec6896a8ef4619567e9aac48c26
 //-------------token Creation & Login------------------------ 
 
  const authorLogin = async function (req, res) {

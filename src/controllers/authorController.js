@@ -1,28 +1,5 @@
 const AuthorModel=require("../models/authorModel")
-<<<<<<< HEAD
-const jwt = require('jsonwebtoken');
-
-
-const createAuthor= async function (req, res) {
-=======
 const jwt=  require("jsonwebtoken")
-/*const createAuthor= async function (req, res) {
->>>>>>> e081105b93c81ec6896a8ef4619567e9aac48c26
-    try{
-    let author = req.body
-    let authorCreated = await AuthorModel.create(author)
-    res.status(201).send({status:true,data: authorCreated})
-    }catch(err){
-        res.status(500).send({msg:err.message})
-    }
-}*/
-
-<<<<<<< HEAD
-=======
-/*const getAuthorsData= async function (req, res) {
-    let authors = await AuthorModel.find()
-    res.send({datadda: authors})
-}*/
 const isValid = function (value) {
     if (typeof value === "undefined" || value === null) return false;
     if (typeof value === "string" && value.trim().length > 0) return true;
@@ -136,7 +113,6 @@ const isValid = function (value) {
   
 
 
->>>>>>> e081105b93c81ec6896a8ef4619567e9aac48c26
 
 module.exports.createAuthor  = createAuthor
 
