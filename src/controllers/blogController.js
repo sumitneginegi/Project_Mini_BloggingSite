@@ -3,6 +3,7 @@ const blogs = require("../models/blogModel")
 const authorModel = require("../models/authorModel");
 const  mongoose = require('mongoose')
 const jwt=  require("jsonwebtoken")
+
 const ObjectId = require('mongoose').Types.ObjectId
 
 
@@ -58,7 +59,7 @@ const isValidRequest = function (object) {
 const isValidObjectId = function (objectId) {
     return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
 };
-        const requestBody = req.body;
+       // const requestBody = req.body;
         const queryParams = req.query;
 
         //conditions to find all not deleted blogs
@@ -68,11 +69,11 @@ const isValidObjectId = function (objectId) {
             deletedAt: null
         };
 
-        if (isValidRequest(requestBody)) {          //  validation  of req body
+       /* if (isValidRequest(requestBody)) {          //  validation  of req body
             return res
                 .status(400)
                 .send({ status: false, message: "data is required in body" });
-        }
+        }*/
 
         //if queryParams are present then each key to be validated then only to be added to filterCondition object. on that note filtered blogs to be returened
         if (isValidRequest(queryParams)) {
@@ -153,7 +154,7 @@ const isValidObjectId = function (objectId) {
             }
             res
                 .status(200)
-                .send({ status: true, message: "filtered blog list", blogsCounts: filetredBlogs.length, blogList: filetredBlogs })
+                .send({ status: true, message: "filtered blog list", blogsCounts: filetredBlogs.length, data: filetredBlogs })
 
             //if no queryParams are provided then finding all not deleted blogs
         } else {
@@ -166,7 +167,7 @@ const isValidObjectId = function (objectId) {
             }
             res
                 .status(200)
-                .send({ status: true, message: "blogs list", blogsCount: allBlogs.length, blogsList: allBlogs });
+                .send({ status: true, message: "blogs list", blogsCount: allBlogs.length, data: allBlogs });
         }
 
     } catch (error) {
@@ -198,11 +199,11 @@ const updatedBlog = async function (req, res) {
         const requestBody = req.body;
         const queryParams = req.query;
 
-        if (!isValidRequest(queryParams)) {
+        /*if (!isValidRequest(queryParams)) {
             return res
                 .status(400)
                 .send({ status: false, message: "invalid request" })
-        }
+        }*/
 
         if (!isValidRequest(requestBody)) {
             return res
@@ -368,7 +369,7 @@ const isValidObjectId = function (objectId) {
 
     res
         .status(200)
-        .send({ status: true, message: "blog is deleted" });
+        .send({ status: true, message: "blog  not exist" });
 
 } catch (error) {
 
@@ -417,29 +418,6 @@ const isValidObjectId = function (objectId) {
 
 //-------------token Creation & Login------------------------ 
 
- const authorLogin = async function (req, res) {
-     let userName = req.body.email;
-     let password = req.body.password;
-  
-     let author = await authorModel.findOne({ email: userName, password: password });
-    if (!author)
-      return res.status(404).send({
-         status: false,
-      msg: "Username or the Password is invalid",
-      });
-  
-    
-    let token = jwt.sign(
-      {//--------Payload--------------------
-        authorId: author._id.toString()
-
-      },//---------------------------Secret Key -----------------------------
-      "Blogging-Mini-Site(Project1)"
-    );
-    res.setHeader("x-api-key", token);
-    res.send({ status: true, data: token });
-    
-    }
 
 
 module.exports.createBlog= createBlog
@@ -447,4 +425,4 @@ module.exports.updatedBlog= updatedBlog
 module.exports.deleteBlog= deleteBlog
 module.exports.deleteBlog2= deleteBlog2
 module.exports.getblog= getblog
-module.exports.authorLogin= authorLogin
+
