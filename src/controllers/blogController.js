@@ -117,7 +117,7 @@ const isValidObjectId = function (objectId) {
                                 .status(400)
                                 .send({ status: false, message: "blog tag must be in valid format" });
                         }
-                        filterCondition["tags"] = tags[i].trim();
+                      filterCondition["tags"] = tags[i].trim();
                     }
                 } else {
                     if (!isValid(tags)) {
@@ -125,7 +125,7 @@ const isValidObjectId = function (objectId) {
                             .status(400)
                             .send({ status: false, message: "Blog tags must in valid format" });
                     }
-                    filterCondition["tags"] = tags.trim();
+                //  filterCondition["tags"] = tags.trim();
                 }
             }
 
@@ -145,7 +145,7 @@ const isValidObjectId = function (objectId) {
                             .status(400)
                             .send({ status: false, message: "Blog subcategory must in valid format" });
                     }
-                    filterCondition["subcategory"] = subcategory.trim();
+                 //  filterCondition["subcategory"] = subcategory.trim();
                 }
             }
 
@@ -202,7 +202,7 @@ const updatedBlog = async function (req, res) {
 
         const blogId = req.params["blogId"]
         const requestBody = req.body;
-        const queryParams = req.query;
+       // const queryParams = req.query;
 
         /*if (!isValidRequest(queryParams)) {
             return res
@@ -331,21 +331,21 @@ const deleteBlog = async function(req, res) {
       return mongoose.Types.ObjectId.isValid(objectId)    //validation of id 
   };
   
-      const requestBody = req.body;
-      const queryParams = req.query;
+      //const requestBody = req.body;
+      //const queryParams = req.query;
       const blogId = req.params.blogId;
   
-      if (isValidRequest(queryParams)) {
-          return res
-              .status(400)
-              .send({ status: false, message: "invalid Request" });
-      }
+    //   if (isValidRequest(queryParams)) {
+    //       return res
+    //           .status(400)
+    //           .send({ status: false, message: "invalid Request" });
+    //   }
   
-      if (isValidRequest(requestBody)) {
-          return res
-              .status(400)
-              .send({ status: false, message: "invalid Request" });
-      }
+    //   if (isValidRequest(requestBody)) {
+    //       return res
+    //           .status(400)
+    //           .send({ status: false, message: "invalid Request" });
+    //   }
   
       if (!isValidObjectId(blogId)) {
           return res
@@ -420,7 +420,6 @@ const deleteBlog = async function(req, res) {
       }
   
  
-//-------------token Creation & Login------------------------ 
 
 
 
