@@ -1,1 +1,1 @@
-# Project_Mini_BloggingSite
+# Project 1 _Mini_BloggingSite
